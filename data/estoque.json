@@ -1,0 +1,38 @@
+[
+    {
+        "codigo": "MP-201",
+        "tipo": "SAIDA",
+        "quantidade": 20,
+        "observacao": "Ajuste via Web"
+    },
+    {
+        "codigo": "PA-001",
+        "tipo": "ENTRADA",
+        "quantidade": 10,
+        "observacao": "Ajuste via Web"
+    },
+    {
+        "codigo": "PA-001",
+        "tipo": "ENTRADA",
+        "quantidade": 10,
+        "observacao": "Ajuste via Web"
+    },
+    {
+        "codigo": "PA-001",
+        "tipo": "ENTRADA",
+        "quantidade": 10,
+        "observacao": "Ajuste via Web"
+    },
+    {
+        "codigo": "PA-001",
+        "tipo": "ENTRADA",
+        "quantidade": 10,
+        "observacao": "Ajuste via Web"
+    },
+    {
+        "codigo": "MP-201",
+        "tipo": "SAIDA",
+        "quantidade": 200,
+        "observacao": "Ajuste via Web"
+    }
+]

@@ -118,5 +118,12 @@
         "lead_time": 1,
         "estoque_seguranca": 15,
         "lote_minimo": 30
+    },
+    "MP-3333": {
+        "descricao": "Aro 20",
+        "tipo": "MP",
+        "unidade": "un",
+        "estoque_seguranca": 5,
+        "lead_time": 1
     }
 }
