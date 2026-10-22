@@ -36,18 +36,21 @@ MRP2_PedalForte/
 ├── persistencia.py        # Camada de persistência e base de demonstração
 ├── utils.py               # Funções utilitárias e validações
 └── README.md              # Documentação do projeto
+```
 
-🚀 Instruções de Execução
-    1- Certifique-se de ter o Python 3.10+ instalado em seu ambiente.
-    2- Instale as dependências necessárias (como o Matplotlib):
+## 🚀 Instruções de Execução
+1- Certifique-se de ter o Python 3.10+ instalado em seu ambiente.
+2- Instale as dependências necessárias (como o Matplotlib):
+```text
+py -m pip install matplotlib
+```
+3- Execute o programa principal a partir da raiz do repositório:
+```text
+py main.py
+```
 
-    py -m pip install matplotlib
+## 📋 Requisitos Implementados (RF e RNF)
 
-    3- Execute o programa principal a partir da raiz do repositório:
-
-    py main.py
-
-📋 Requisitos Implementados (RF e RNF)
 RF01 a RF03: Menus interativos, cadastros de itens (PA, SA, MP) e estrutura de produto (BOM) em até 3 níveis com explosão indentada.
 
 RF04 e RF05: Registo de movimentações de estoque (entradas, saídas e ajustes) com validação de saldo negativo e consulta ao Kardex.
