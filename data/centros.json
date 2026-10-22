@@ -1,0 +1,14 @@
+{
+    "CT-01": {
+        "codigo": "CT-01",
+        "descricao": "Soldagem de Quadros",
+        "capacidade_horas": 40.0,
+        "custo_hora": 50.0
+    },
+    "CT-03": {
+        "codigo": "CT-03",
+        "descricao": "Montagem final",
+        "capacidade_horas": 16.0,
+        "custo_hora": 65.0
+    }
+}
