@@ -1,5 +1,5 @@
 """Módulo de interface em modo texto para navegação nos menus do sistema."""
-
+from itens import gerenciar_itens
 def exibir_menu_principal(dados: dict) -> None:
     """Exibe o menu principal e direciona para as funcionalidades do sistema."""
     while True:
@@ -21,7 +21,7 @@ def exibir_menu_principal(dados: dict) -> None:
         opcao = input("Escolha uma opcao: ").strip()
         
         if opcao == "1":
-            print("[Esqueleto] Cadastros")
+            gerenciar_itens(dados)
         elif opcao == "2":
             print("[Esqueleto] Estoque")
         elif opcao == "3":
