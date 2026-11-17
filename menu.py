@@ -6,6 +6,7 @@ from estoque import gerenciar_estoque
 from mps import gerenciar_mps
 from mrp import executar_calculo_mrp
 from ordens import gerenciar_ordens
+from capacidade import analisar_capacidade
 
 def sub_menu_cadastros(dados: dict) -> None:
     """Submenu para gerenciamento de cadastros (Itens e Estrutura BOM)."""
@@ -55,7 +56,7 @@ def exibir_menu_principal(dados: dict) -> None:
         elif opcao == "5":
             gerenciar_ordens(dados)
         elif opcao == "6":
-            print("[Em desenvolvimento] CRP")
+            analisar_capacidade(dados)
         elif opcao == "7":
             print("[Em desenvolvimento] Custo Padrão")
         elif opcao == "8":
