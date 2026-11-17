@@ -6,23 +6,29 @@ from estoque import gerenciar_estoque
 from mps import gerenciar_mps
 from mrp import executar_calculo_mrp
 from ordens import gerenciar_ordens
-from capacidade import analisar_capacidade
+from capacidade import gerenciar_centros, gerenciar_roteiros, analisar_capacidade
 from custos import gerenciar_custos
 from relatorios import gerenciar_relatorios
 from graficos import gerenciar_graficos
 
 def sub_menu_cadastros(dados: dict) -> None:
-    """Submenu para gerenciamento de cadastros (Itens e Estrutura BOM)."""
+    """Submenu para gerenciamento de cadastros (Itens, Estrutura BOM, Centros e Roteiros)."""
     while True:
         print("\n--- MENU DE CADASTROS ---")
         print("1. Gerenciar Itens (PA, SA, MP)")
         print("2. Gerenciar Estrutura de Produto (BOM)")
+        print("3. Gerenciar Centros de Trabalho")
+        print("4. Gerenciar Roteiros de Produção")
         print("0. Voltar ao menu principal")
         op = input("Escolha uma opção: ").strip()
         if op == "1":
             gerenciar_itens(dados)
         elif op == "2":
             gerenciar_estrutura(dados)
+        elif op == "3":
+            gerenciar_centros(dados)
+        elif op == "4":
+            gerenciar_roteiros(dados)
         elif op == "0":
             break
         else:
@@ -65,7 +71,7 @@ def exibir_menu_principal(dados: dict) -> None:
         elif opcao == "8":
             gerenciar_relatorios(dados)
         elif opcao == "9":
-            print("[Em desenvolvimento] Gráficos")
+            gerenciar_graficos(dados)
         elif opcao == "0":
             break
         else:

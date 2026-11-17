@@ -1,6 +1,130 @@
-"""Módulo de cálculo e análise de Carga x Capacidade (CRP) dos Centros de Trabalho (RF12)."""
+"""Módulo de cadastro de centros de trabalho, roteiros e análise de Carga x Capacidade (CRP) (RF06, RF12)."""
 
 HORIZONTE_SEMANAS = 8
+
+def cadastrar_centro_trabalho(dados: dict) -> None:
+    """Cadastra um novo Centro de Trabalho (RF06)."""
+    print("\n--- CADASTRO DE CENTRO DE TRABALHO ---")
+    codigo = input("Código do centro (ex: CT-01): ").strip().upper()
+    if not codigo:
+        print("ERRO: Código inválido.")
+        return
+    if codigo in dados["centros"]:
+        print(f"ERRO: Centro '{codigo}' já cadastrado.")
+        return
+
+    descricao = input("Descrição do centro (ex: Usinagem e Solda): ").strip()
+    if not descricao:
+        print("ERRO: Descrição não pode ser vazia.")
+        return
+
+    try:
+        capacidade = float(input("Capacidade semanal (horas/semana): ").replace(",", "."))
+        custo_hora = float(input("Custo por hora (R$): ").replace(",", "."))
+        if capacidade <= 0 or custo_hora < 0:
+            raise ValueError
+    except ValueError:
+        print("ERRO: Valores numéricos inválidos.")
+        return
+
+    dados["centros"][codigo] = {
+        "codigo": codigo,
+        "descricao": descricao,
+        "capacidade_semanal": capacidade,
+        "custo_hora": custo_hora
+    }
+    print(f"Sucesso: Centro de Trabalho '{codigo}' cadastrado!")
+
+def listar_centros_trabalho(dados: dict) -> None:
+    """Lista os Centros de Trabalho cadastrados."""
+    print("\n--- CENTROS DE TRABALHO CADASTRADOS ---")
+    if not dados["centros"]:
+        print("Nenhum centro cadastrado.")
+        return
+    print(f"{'Código':<10} | {'Descrição':<30} | {'Cap. Semanal (h)':<18} | {'Custo/h (R$)':<12}")
+    print("-" * 78)
+    for cod, ct in sorted(dados["centros"].items()):
+        print(f"{cod:<10} | {ct['descricao']:<30} | {ct['capacidade_semanal']:<18.1f} | R$ {ct['custo_hora']:<9.2f}")
+
+def gerenciar_centros(dados: dict) -> None:
+    """Submenu para Centros de Trabalho."""
+    while True:
+        print("\n--- GESTÃO DE CENTROS DE TRABALHO ---")
+        print("1. Cadastrar novo centro de trabalho")
+        print("2. Listar centros cadastrados")
+        print("0. Voltar")
+        op = input("Escolha uma opção: ").strip()
+        if op == "1":
+            cadastrar_centro_trabalho(dados)
+        elif op == "2":
+            listar_centros_trabalho(dados)
+        elif op == "0":
+            break
+        else:
+            print("ERRO: Opção inválida.")
+
+def cadastrar_roteiro(dados: dict) -> None:
+    """Cadastra o roteiro de operação única para um item fabricado (PA ou SA) (RF06)."""
+    print("\n--- CADASTRO DE ROTEIRO DE PRODUÇÃO ---")
+    if not dados["centros"]:
+        print("ERRO: Cadastre pelo menos um Centro de Trabalho primeiro.")
+        return
+
+    item_cod = input("Código do item fabricado (PA ou SA): ").strip().upper()
+    if item_cod not in dados["itens"]:
+        print(f"ERRO: Item '{item_cod}' não encontrado.")
+        return
+    if dados["itens"][item_cod]["tipo"] not in ["PA", "SA"]:
+        print("ERRO: Roteiros só podem ser cadastrados para itens fabricados (PA ou SA).")
+        return
+
+    centro_cod = input("Código do Centro de Trabalho responsável: ").strip().upper()
+    if centro_cod not in dados["centros"]:
+        print(f"ERRO: Centro '{centro_cod}' não encontrado.")
+        return
+
+    try:
+        tempo = float(input("Tempo unitário de produção (em horas/unidade, ex: 0.5): ").replace(",", "."))
+        if tempo <= 0:
+            raise ValueError
+    except ValueError:
+        print("ERRO: Tempo unitário deve ser maior que zero.")
+        return
+
+    dados["roteiros"][item_cod] = {
+        "item": item_cod,
+        "centro": centro_cod,
+        "tempo_unitario": tempo
+    }
+    print(f"Sucesso: Roteiro do item '{item_cod}' vinculado ao centro '{centro_cod}' ({tempo} h/un)!")
+
+def listar_roteiros(dados: dict) -> None:
+    """Lista os roteiros cadastrados."""
+    print("\n--- ROTEIROS DE PRODUÇÃO CADASTRADOS ---")
+    if not dados["roteiros"]:
+        print("Nenhum roteiro cadastrado.")
+        return
+    print(f"{'Item':<10} | {'Centro':<10} | {'Tempo Unitário (h/un)':<22}")
+    print("-" * 48)
+    for item_cod, rot in sorted(dados["roteiros"].items()):
+        print(f"{item_cod:<10} | {rot['centro']:<10} | {rot['tempo_unitario']:<22.2f}")
+
+def gerenciar_roteiros(dados: dict) -> None:
+    """Submenu para Roteiros de Produção."""
+    while True:
+        print("\n--- GESTÃO DE ROTEIROS DE PRODUÇÃO ---")
+        print("1. Cadastrar/Alterar roteiro de item")
+        print("2. Listar roteiros cadastrados")
+        print("0. Voltar")
+        op = input("Escolha uma opção: ").strip()
+        if op == "1":
+            cadastrar_roteiro(dados)
+        elif op == "2":
+            listar_roteiros(dados)
+        elif op == "0":
+            break
+        else:
+            print("ERRO: Opção inválida.")
 
 def analisar_capacidade(dados: dict) -> None:
     """Calcula a carga alocada em cada centro de trabalho por semana e compara com a capacidade disponível (RF12)."""
@@ -18,16 +142,14 @@ def analisar_capacidade(dados: dict) -> None:
         print("ERRO: Execute o cálculo MRP (Opção 4) primeiro para gerar as necessidades de produção.")
         return
 
-    # Inicializa a carga alocada por centro e por semana [centro][semana]
     carga_centros = {ct: [0.0] * HORIZONTE_SEMANAS for ct in dados["centros"]}
 
-    # Calcula a carga com base nas ordens planejadas ou liberações do MRP para itens fabricados (PA, SA)
     for codigo, resultado in dados["mrp_calculado"].items():
         tipo_item = dados["itens"].get(codigo, {}).get("tipo")
         if tipo_item in ["PA", "SA"] and codigo in dados["roteiros"]:
             roteiro = dados["roteiros"][codigo]
             centro = roteiro["centro"]
-            tempo_unitario = roteiro["tempo_unitario"] # horas por unidade
+            tempo_unitario = roteiro["tempo_unitario"]
 
             liberacao = resultado["liberacao"]
             if centro in carga_centros:
@@ -50,7 +172,6 @@ def analisar_capacidade(dados: dict) -> None:
         print("  " + "-" * 70)
         print(f"  Carga (h)     | " + " | ".join([f"{x:<5.1f}" for x in cargas_semana]))
         
-        # Análise de sobrecarga
         tem_sobrecarga = False
         for s, carga in enumerate(cargas_semana):
             if carga > capacidade_disponivel:
