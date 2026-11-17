@@ -8,6 +8,7 @@ from mrp import executar_calculo_mrp
 from ordens import gerenciar_ordens
 from capacidade import analisar_capacidade
 from custos import gerenciar_custos
+from relatorios import gerenciar_relatorios
 
 def sub_menu_cadastros(dados: dict) -> None:
     """Submenu para gerenciamento de cadastros (Itens e Estrutura BOM)."""
@@ -61,7 +62,7 @@ def exibir_menu_principal(dados: dict) -> None:
         elif opcao == "7":
             gerenciar_custos(dados)
         elif opcao == "8":
-            print("[Em desenvolvimento] Relatórios")
+            gerenciar_relatorios(dados)
         elif opcao == "9":
             print("[Em desenvolvimento] Gráficos")
         elif opcao == "0":
