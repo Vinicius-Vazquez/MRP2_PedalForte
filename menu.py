@@ -4,6 +4,7 @@ from itens import gerenciar_itens
 from estrutura import gerenciar_estrutura
 from estoque import gerenciar_estoque
 from mps import gerenciar_mps
+from mrp import executar_calculo_mrp
 
 def sub_menu_cadastros(dados: dict) -> None:
     """Submenu para gerenciamento de cadastros (Itens e Estrutura BOM)."""
@@ -49,7 +50,7 @@ def exibir_menu_principal(dados: dict) -> None:
         elif opcao == "3":
             gerenciar_mps(dados)
         elif opcao == "4":
-            print("[Em desenvolvimento] MRP")
+            executar_calculo_mrp(dados)
         elif opcao == "5":
             print("[Em desenvolvimento] Ordens")
         elif opcao == "6":
