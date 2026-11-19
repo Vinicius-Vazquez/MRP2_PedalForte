@@ -1,0 +1,13 @@
+Codigo,Descricao,Tipo,Unidade,Saldo Atual,Estoque Seguranca,Custo Unitario (R$)
+MP-100,Tubo de Aço Carbono,MP,m,0.0,20.0,15.00
+MP-101,Tinta Epóxi,MP,L,0.0,20.0,25.00
+MP-200,Aro 29 Alumínio,MP,un,0.0,15.0,45.00
+MP-201,Raio Inox,MP,un,0.0,100.0,1.50
+MP-202,Pneu 29 x 2.20,MP,un,0.0,20.0,35.00
+MP-300,Guidão,MP,un,0.0,10.0,45.00
+MP-301,Kit Transmissão 12v,MP,un,0.0,10.0,320.00
+MP-400,Selim Anatômico,MP,un,0.0,10.0,55.00
+PA-001,Bicicleta Aro 29 MTB,PA,un,0.0,5.0,940.50
+PA-002,Bicicleta Aro 29 Urban,PA,un,0.0,3.0,557.50
+SA-010,Quadro Aro 29 Soldado,SA,un,0.0,5.0,132.50
+SA-020,Roda Aro 29 Montada,SA,un,0.0,10.0,174.00
