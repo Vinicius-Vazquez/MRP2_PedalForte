@@ -38,6 +38,7 @@ def calcular_custo_produto(codigo: str, dados: dict, visitados=None) -> float:
     custo_total = 0.0
 
     # 1. Custo dos materiais componentes (BOM)
+    estrutura = dados.get("estrutura", {})
     if codigo in estrutura:
         for filho_cod, qtd in _iterar_componentes(estrutura[codigo]):
             custo_filho = calcular_custo_produto(filho_cod, dados, visitados.copy())
@@ -77,4 +78,3 @@ def gerenciar_custos(dados: dict) -> None:
 
     print("-" * 75)
     print("Cálculo e atualização de custos padrões concluídos com sucesso!")
-    
