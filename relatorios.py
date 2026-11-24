@@ -38,30 +38,43 @@ def exportar_relatorio_estoque(dados: dict) -> None:
 
 
 def exportar_relatorio_ordens(dados: dict) -> None:
-    """Exporta todas as ordens de produção e compra para um arquivo CSV (RF15)."""
+    """Exporta todas as ordens de produção e compra para um arquivo CSV (RF14)."""
     print("\n--- EXPORTANDO RELATÓRIO DE ORDENS (CSV) ---")
-    
+
     if not os.path.exists(DIRETORIO_DADOS):
         os.makedirs(DIRETORIO_DADOS)
 
     caminho_csv = os.path.join(DIRETORIO_DADOS, "relatorio_ordens.csv")
     ordens = dados.get("ordens", {})
-    
+
     try:
         with open(caminho_csv, "w", encoding="utf-8", newline="") as f:
             escritor = csv.writer(f)
-            escritor.writerow(["Ordem", "Tipo", "Item", "Quantidade", "Semana", "Status"])
-            
+            escritor.writerow([
+                "Ordem",
+                "Tipo",
+                "Item",
+                "Quantidade",
+                "Semana Liberacao",
+                "Semana Entrega",
+                "Status",
+            ])
+
             for num_ordem, ord_info in sorted(ordens.items()):
+                if not isinstance(ord_info, dict):
+                    continue
+                sem_lib = ord_info.get("semana_liberacao", ord_info.get("semana", ""))
+                sem_ent = ord_info.get("semana_entrega", "")
                 escritor.writerow([
                     num_ordem,
-                    ord_info["tipo"],
-                    ord_info["item"],
-                    ord_info["quantidade"],
-                    ord_info["semana"],
-                    ord_info["status"]
+                    ord_info.get("tipo", ""),
+                    ord_info.get("item", ""),
+                    ord_info.get("quantidade", 0.0),
+                    sem_lib,
+                    sem_ent,
+                    ord_info.get("status", ""),
                 ])
-                
+
         print(f"Sucesso: Relatório de ordens exportado para '{caminho_csv}'!")
     except Exception as e:
         print(f"ERRO: Não foi possível exportar o arquivo: {e}")
