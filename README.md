@@ -2,6 +2,8 @@
 
 Sistema de Planejamento dos Recursos de Manufatura (MRP II) desenvolvido em Python para a fábrica fictícia **Pedal Forte Bicicletas Ltda.** (Divinópolis - MG), no contexto da disciplina de Programação em Python do curso de Engenharia de Computação do CEFET-MG (Campus Divinópolis), sob orientação do Prof. Guido Pantuza.
 
+- **Vídeo de demonstração do projeto:** [Assistir no YouTube](https://youtu.be/AvBBmq72c_s)
+
 ## 1. Visão Geral do Projeto
 
 O sistema substitui controles manuais em planilhas por um fluxo integrado de planejamento e controle da produção e estoques em um horizonte de **8 semanas**. A cada ciclo, o sistema apoia a tomada de decisão sobre o que produzir ou comprar, em quais quantidades, em quais semanas e com qual impacto sobre capacidade produtiva, estoques e custos padrão.
@@ -92,6 +94,10 @@ Ao encerrar o programa pela opção `0. Sair` (ou ao finalizar o bloco `finally`
 6. **CRP e Custos (Opções 6 e 7):** Verificar carga versus capacidade dos centros de trabalho e calcular/atualizar o custo padrão dos itens.
 7. **Relatórios e Gráficos (Opções 8 e 9):** Exportar os relatórios CSV e gerar os gráficos de acompanhamento em PNG na pasta `data/`.
 
-## 7. Autor
+## 7. Demonstração em Vídeo
+
+- **Vídeo de demonstração:** [https://youtu.be/AvBBmq72c_s](https://youtu.be/AvBBmq72c_s)
+
+## 8. Autor
 
 - **Vinícius Souza Vazquez** — Engenharia da Computação, UFCI-MG Campus Divinópolis.

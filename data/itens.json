@@ -7,7 +7,8 @@
         "custo_unitario": 940.5,
         "lead_time": 1,
         "estoque_seguranca": 5.0,
-        "lote_minimo": 10.0
+        "lote_minimo": 10.0,
+        "custo_padrao": 940.5
     },
     "PA-002": {
         "codigo": "PA-002",
@@ -17,7 +18,8 @@
         "custo_unitario": 557.5,
         "lead_time": 1,
         "estoque_seguranca": 3.0,
-        "lote_minimo": 10.0
+        "lote_minimo": 10.0,
+        "custo_padrao": 557.5
     },
     "SA-010": {
         "codigo": "SA-010",
@@ -27,7 +29,8 @@
         "custo_unitario": 132.5,
         "lead_time": 2,
         "estoque_seguranca": 5.0,
-        "lote_minimo": 20.0
+        "lote_minimo": 20.0,
+        "custo_padrao": 132.5
     },
     "SA-020": {
         "codigo": "SA-020",
@@ -37,7 +40,8 @@
         "custo_unitario": 174.0,
         "lead_time": 1,
         "estoque_seguranca": 10.0,
-        "lote_minimo": 40.0
+        "lote_minimo": 40.0,
+        "custo_padrao": 174.0
     },
     "MP-100": {
         "codigo": "MP-100",
@@ -47,7 +51,8 @@
         "custo_unitario": 15.0,
         "lead_time": 1,
         "estoque_seguranca": 20.0,
-        "lote_minimo": 100.0
+        "lote_minimo": 100.0,
+        "custo_padrao": 15.0
     },
     "MP-101": {
         "codigo": "MP-101",
@@ -57,7 +62,8 @@
         "custo_unitario": 25.0,
         "lead_time": 1,
         "estoque_seguranca": 20.0,
-        "lote_minimo": 50.0
+        "lote_minimo": 50.0,
+        "custo_padrao": 25.0
     },
     "MP-200": {
         "codigo": "MP-200",
@@ -67,7 +73,8 @@
         "custo_unitario": 45.0,
         "lead_time": 1,
         "estoque_seguranca": 15.0,
-        "lote_minimo": 40.0
+        "lote_minimo": 40.0,
+        "custo_padrao": 45.0
     },
     "MP-201": {
         "codigo": "MP-201",
@@ -77,7 +84,8 @@
         "custo_unitario": 1.5,
         "lead_time": 1,
         "estoque_seguranca": 100.0,
-        "lote_minimo": 200.0
+        "lote_minimo": 200.0,
+        "custo_padrao": 1.5
     },
     "MP-202": {
         "codigo": "MP-202",
@@ -87,7 +95,8 @@
         "custo_unitario": 35.0,
         "lead_time": 1,
         "estoque_seguranca": 20.0,
-        "lote_minimo": 50.0
+        "lote_minimo": 50.0,
+        "custo_padrao": 35.0
     },
     "MP-300": {
         "codigo": "MP-300",
@@ -97,7 +106,8 @@
         "custo_unitario": 45.0,
         "lead_time": 1,
         "estoque_seguranca": 10.0,
-        "lote_minimo": 30.0
+        "lote_minimo": 30.0,
+        "custo_padrao": 45.0
     },
     "MP-301": {
         "codigo": "MP-301",
@@ -107,7 +117,8 @@
         "custo_unitario": 320.0,
         "lead_time": 2,
         "estoque_seguranca": 10.0,
-        "lote_minimo": 20.0
+        "lote_minimo": 20.0,
+        "custo_padrao": 320.0
     },
     "MP-400": {
         "codigo": "MP-400",
@@ -117,6 +128,7 @@
         "custo_unitario": 55.0,
         "lead_time": 1,
         "estoque_seguranca": 10.0,
-        "lote_minimo": 30.0
+        "lote_minimo": 30.0,
+        "custo_padrao": 55.0
     }
 }
