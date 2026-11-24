@@ -42,7 +42,7 @@ def _explodir_necessidades(
 
 
 def _recebimentos_programados_por_item(dados: dict) -> dict[str, list[float]]:
-    """Soma quantidades de ordens FIRMES ou LIBERADAS por item e semana (RN08)."""
+    """Soma quantidades de ordens FIRMES ou LIBERADAS por item e semana de entrega (RN08)."""
     itens = dados.get("itens", {})
     rp_por_item = {cod: [0.0] * HORIZONTE_SEMANAS for cod in itens}
     ordens = dados.get("ordens", {})
@@ -54,8 +54,12 @@ def _recebimentos_programados_por_item(dados: dict) -> dict[str, list[float]]:
         status = str(ordem.get("status", "")).upper()
         if status in {"FIRME", "LIBERADA"}:
             cod_item = str(ordem.get("item", ""))
-            semana = int(ordem.get("semana", 0))
             qtd = float(ordem.get("quantidade", 0.0))
+            sem_entrega = ordem.get("semana_entrega")
+            if sem_entrega is None:
+                lt = int(itens.get(cod_item, {}).get("lead_time", 0))
+                sem_entrega = int(ordem.get("semana", 0)) + lt
+            semana = int(sem_entrega)
             if cod_item in rp_por_item and 1 <= semana <= HORIZONTE_SEMANAS and qtd > 0:
                 rp_por_item[cod_item][semana - 1] += qtd
 
@@ -98,8 +102,8 @@ def executar_calculo_mrp(dados: dict) -> None:
             for s in range(min(len(demandas), HORIZONTE_SEMANAS)):
                 necessidades_brutas[pa][s] += float(demandas[s])
 
-    # 2. Explosão hierárquica explícita: primeiro PA -> SA, depois SA -> MP (RN04)
-    _explodir_necessidades(necessidades_brutas, dados, {"PA"}, {"SA"})
+    # 2. Explosão hierárquica explícita: primeiro PA -> SA/MP, depois SA -> MP (RN03, RN04)
+    _explodir_necessidades(necessidades_brutas, dados, {"PA"}, {"SA", "MP"})
     _explodir_necessidades(necessidades_brutas, dados, {"SA"}, {"MP"})
 
     resultados_mrp = {}
