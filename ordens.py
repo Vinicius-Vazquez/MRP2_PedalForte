@@ -1,8 +1,9 @@
 """Módulo de geração, consulta e gestão de Ordens de Produção (OP) e Ordens de Compra (OC) (RF09-RF11, RN02, RN07-RN10)."""
 
 from datetime import datetime
-from mrp import HORIZONTE_SEMANAS
 from utils import ler_codigo
+
+HORIZONTE_SEMANAS = 8
 
 
 def _garantir_estrutura_ordens(dados: dict) -> dict:
@@ -45,7 +46,7 @@ def _registrar_movimento_kardex(
     documento: str,
 ) -> None:
     """Registra movimentação no histórico/kardex se existir estrutura compatível (RN10)."""
-    data_str = datetime.now().strftime("%d/%m/%Y %H:%M")
+    data_str = datetime.now().strftime("%d/%m/%Y")
     registro = {
         "data": data_str,
         "item": codigo_item,
