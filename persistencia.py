@@ -104,7 +104,7 @@ def carregar_dados() -> dict:
 
 
 def salvar_dados(dados: dict) -> None:
-    """Salva todos os dicionários do sistema nos arquivos JSON da pasta data/."""
+    """Salva todos os dicionários do sistema nos arquivos JSON da pasta data/ e o Kardex em CSV."""
     if not os.path.exists(DIRETORIO_DADOS):
         os.makedirs(DIRETORIO_DADOS)
 
@@ -115,7 +115,7 @@ def salvar_dados(dados: dict) -> None:
         "centros": "centros.json",
         "roteiros": "roteiros.json",
         "mps": "mps.json",
-        "ordens": "ordens.json"
+        "ordens": "ordens.json",
     }
 
     for chave, nome_arquivo in arquivos.items():
