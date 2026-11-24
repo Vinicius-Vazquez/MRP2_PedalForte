@@ -126,9 +126,9 @@ def gerenciar_roteiros(dados: dict) -> None:
 
 
 def analisar_capacidade(dados: dict) -> None:
-    """Calcula a carga alocada em cada centro de trabalho por semana e compara com a capacidade disponível (RF12)."""
+    """Calcula a carga alocada em cada centro de trabalho por semana com base nas OPs liberadas (RF12, RN09)."""
     print("\n--- ANÁLISE DE CARGA X CAPACIDADE (CRP) ---")
-    
+
     if "centros" not in dados or not dados["centros"]:
         print("ERRO: Nenhum Centro de Trabalho cadastrado no sistema.")
         return
@@ -137,40 +137,45 @@ def analisar_capacidade(dados: dict) -> None:
         print("ERRO: Nenhum roteiro de produção cadastrado para vincular itens aos centros.")
         return
 
-    if "mrp_calculado" not in dados or not dados["mrp_calculado"]:
-        print("ERRO: Execute o cálculo MRP (Opção 4) primeiro para gerar as necessidades de produção.")
-        return
-
     carga_centros = {ct: [0.0] * HORIZONTE_SEMANAS for ct in dados["centros"]}
+    ordens = dados.get("ordens", {})
+    lista_ordens = ordens.values() if isinstance(ordens, dict) else ordens
 
-    for codigo, resultado in dados["mrp_calculado"].items():
-        tipo_item = dados["itens"].get(codigo, {}).get("tipo")
-        if tipo_item in ["PA", "SA"] and codigo in dados["roteiros"]:
-            roteiro = dados["roteiros"][codigo]
-            centro = roteiro["centro"]
-            tempo_unitario = roteiro["tempo_unitario"]
+    ops_liberadas_encontradas = 0
 
-            liberacao = resultado["liberacao"]
-            if centro in carga_centros:
-                for semana in range(HORIZONTE_SEMANAS):
-                    qtd_produzir = liberacao[semana]
-                    if qtd_produzir > 0:
-                        horas_necessarias = qtd_produzir * tempo_unitario
-                        carga_centros[centro][semana] += horas_necessarias
+    for ordem in lista_ordens:
+        if not isinstance(ordem, dict):
+            continue
+        if str(ordem.get("tipo", "")).upper() == "OP" and str(ordem.get("status", "")).upper() == "LIBERADA":
+            codigo = str(ordem.get("item", ""))
+            tipo_item = dados.get("itens", {}).get(codigo, {}).get("tipo")
+            if tipo_item in ["PA", "SA"] and codigo in dados["roteiros"]:
+                roteiro = dados["roteiros"][codigo]
+                centro = roteiro["centro"]
+                tempo_unitario = float(roteiro["tempo_unitario"])
+                semana_lib = int(ordem.get("semana_liberacao", ordem.get("semana", 0)))
+                qtd_produzir = float(ordem.get("quantidade", 0.0))
+
+                if centro in carga_centros and 1 <= semana_lib <= HORIZONTE_SEMANAS and qtd_produzir > 0:
+                    carga_centros[centro][semana_lib - 1] += qtd_produzir * tempo_unitario
+                    ops_liberadas_encontradas += 1
 
     print("\n" + "=" * 90)
-    print(" RELATÓRIO DE CARGA X CAPACIDADE DOS CENTROS DE TRABALHO ")
+    print(" RELATÓRIO DE CARGA X CAPACIDADE DOS CENTROS DE TRABALHO (OPS LIBERADAS) ")
     print("=" * 90)
+
+    if ops_liberadas_encontradas == 0:
+        print("\nAviso: Nenhuma OP com status 'LIBERADA' encontrada no momento (carga exibida: 0.0h).")
 
     for ct_cod, ct_info in sorted(dados["centros"].items()):
         capacidade_disponivel = ct_info["capacidade_semanal"]
         cargas_semana = carga_centros[ct_cod]
 
         print(f"\nCentro: {ct_cod} - {ct_info['descricao']} (Capacidade Semanal: {capacidade_disponivel:.1f} h)")
-        print(f"  Semana        | " + " | ".join([f"S{i}" for i in range(1, HORIZONTE_SEMANAS + 1)]))
+        print("  Semana        | " + " | ".join([f"S{i}" for i in range(1, HORIZONTE_SEMANAS + 1)]))
         print("  " + "-" * 70)
-        print(f"  Carga (h)     | " + " | ".join([f"{x:<5.1f}" for x in cargas_semana]))
-        
+        print("  Carga (h)     | " + " | ".join([f"{x:<5.1f}" for x in cargas_semana]))
+
         tem_sobrecarga = False
         for s, carga in enumerate(cargas_semana):
             if carga > capacidade_disponivel:
