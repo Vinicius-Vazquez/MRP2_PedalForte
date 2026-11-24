@@ -1,5 +1,5 @@
 """Módulo de cadastro de centros de trabalho, roteiros e análise de Carga x Capacidade (CRP) (RF06, RF12)."""
-from utils import ler_float, ler_texto_obrigatorio
+from utils import ler_codigo, ler_float, ler_texto_obrigatorio
 
 HORIZONTE_SEMANAS = 8
 
@@ -85,7 +85,6 @@ def cadastrar_roteiro(dados: dict) -> None:
     tempo = ler_float("Tempo unitário de produção (em horas/unidade, ex: 0.5): ", minimo=0.0001)
     if tempo is None:
         print("ERRO: Tempo unitário deve ser maior que zero.")
-        return
         return
 
     dados["roteiros"][item_cod] = {
