@@ -94,4 +94,4 @@ Ao encerrar o programa pela opção `0. Sair` (ou ao finalizar o bloco `finally`
 
 ## 7. Autor
 
-- **Vinícius Souza Vazquez** — Engenharia da Computação, CEFET-MG Campus Divinópolis.
+- **Vinícius Souza Vazquez** — Engenharia da Computação, UFCI-MG Campus Divinópolis.
