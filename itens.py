@@ -1,5 +1,7 @@
 """Módulo de cadastro, listagem e alteração de itens do Sistema MRP II (RF02, RN01)."""
 
+from utils import ler_codigo, ler_float, ler_inteiro, ler_texto_obrigatorio
+
 TIPOS_VALIDOS = {"PA": "Produto Acabado", "SA": "Semiacabado", "MP": "Matéria-Prima"}
 
 
@@ -75,53 +77,47 @@ def validar_codigo_item(codigo: str) -> bool:
 
 
 def cadastrar_item(dados: dict) -> None:
-    """Cadastra um novo item aplicando as regras de negócio de formato e unicidade (RF02, RN01)."""
-    print("\n--- CADASTRO DE NOVO ITEM ---")
-    codigo = input("Digite o código do item (ex: PA-001, SA-010, MP-100): ").strip().upper()
-    
-    if not validar_codigo_item(codigo):
-        print("ERRO: Código inválido! O formato deve ser Tipo-Número (ex: PA-001, SA-010, MP-100).")
-        return
-    
+    """Cadastra um novo item (PA, SA ou MP) no sistema (RF01, RN01, RNF04)."""
+    print("\n--- CADASTRO DE ITEM ---")
+    codigo = ler_codigo("Digite o código do item (ex: PA-001, SA-010, MP-201): ")
     if codigo in dados["itens"]:
-        print(f"ERRO: Já existe um item cadastrado com o código {codigo}.")
+        print(f"ERRO: O item {codigo} já está cadastrado no sistema.")
         return
 
-    tipo_sigla = codigo.split("-")[0]
-    print(f"Tipo identificado: {TIPOS_VALIDOS[tipo_sigla]}")
-
-    descricao = input("Descrição do item: ").strip()
-    if not descricao:
-        print("ERRO: A descrição não pode ser vazia.")
+    tipo = input(
+        "Digite o tipo do item ([PA] Produto Acabado, [SA] Semi-acabado, [MP] Matéria-prima): "
+    ).strip().upper()
+    if tipo not in ["PA", "SA", "MP"]:
+        print("ERRO: Tipo inválido. Escolha PA, SA ou MP.")
         return
 
-    try:
-        unidade = input("Unidade de medida (ex: un, m, L, kg): ").strip()
-        custo_unitario = float(input("Custo unitário (R$): ").strip())
-        lead_time = int(input("Lead time (em semanas): ").strip())
-        estoque_seguranca = float(input("Estoque de segurança: ").strip())
-        lote_minimo = float(input("Lote mínimo de compra/produção: ").strip())
-    except ValueError:
+    descricao = ler_texto_obrigatorio("Digite a descrição do item: ", campo="descrição")
+    unidade = ler_texto_obrigatorio("Unidade de medida (ex: un, m, L, kg): ", campo="unidade")
+
+    custo_unitario = ler_float("Custo unitário (R$): ", minimo=0.0)
+    lead_time = ler_inteiro("Lead time (em semanas): ", minimo=0)
+    estoque_seguranca = ler_float("Estoque de segurança: ", minimo=0.0)
+    lote_minimo = ler_float("Lote mínimo de compra/produção: ", minimo=0.0)
+
+    if None in (custo_unitario, lead_time, estoque_seguranca, lote_minimo):
         print("ERRO: Valores numéricos inválidos inseridos. Operação cancelada.")
         return
 
-    # Registra o item no dicionário principal
     dados["itens"][codigo] = {
         "codigo": codigo,
-        "tipo": tipo_sigla,
+        "tipo": tipo,
         "descricao": descricao,
         "unidade": unidade,
         "custo_unitario": custo_unitario,
         "lead_time": lead_time,
         "estoque_seguranca": estoque_seguranca,
-        "lote_minimo": lote_minimo
+        "lote_minimo": lote_minimo,
     }
 
-    # Garante estrutura de estoque inicial caso não exista
     if codigo not in dados["estoque"]:
         dados["estoque"][codigo] = {"saldo_atual": 0.0}
 
-    print(f"Sucesso: Item {codigo} cadastrado com sucesso!")
+    print(f"Sucesso: Item {codigo} ({descricao}) cadastrado com saldo inicial 0.0!")
 
 
 def listar_itens(dados: dict) -> None:
