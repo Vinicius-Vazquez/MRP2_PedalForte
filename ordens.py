@@ -32,22 +32,20 @@ def _registrar_movimento_kardex(
     saldo_apos: float,
     documento: str,
 ) -> None:
-    """Registra movimentação no histórico/kardex se existir estrutura compatível (RN10)."""
-    data_str = datetime.now().strftime("%d/%m/%Y")
-    registro = {
-        "data": data_str,
+    """Registra movimentação no histórico/kardex em dados['movimentos'] (RN10)."""
+    movimentos = dados.get("movimentos")
+    if not isinstance(movimentos, list):
+        movimentos = []
+        dados["movimentos"] = movimentos
+
+    movimentos.append({
+        "data": datetime.now().strftime("%d/%m/%Y"),
         "item": codigo_item,
         "tipo": tipo_mov,
         "quantidade": quantidade,
         "saldo": saldo_apos,
         "documento": documento,
-    }
-
-    if "kardex" in dados and isinstance(dados["kardex"], dict):
-        dados["kardex"].setdefault(codigo_item, []).append(registro)
-
-    if "movimentos" in dados and isinstance(dados["movimentos"], list):
-        dados["movimentos"].append(registro)
+    })
 
 
 def gerar_ordens_automaticas(dados: dict) -> None:
