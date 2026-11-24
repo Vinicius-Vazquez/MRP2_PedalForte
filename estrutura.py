@@ -1,5 +1,7 @@
 """Módulo de gerenciamento e explosão da Estrutura de Produto (BOM) em até 3 níveis (RF03, RN03)."""
 
+from utils import ler_codigo, ler_float
+
 
 def _iterar_componentes(estrutura_pai) -> list[tuple[str, float]]:
     """Normaliza os componentes de um item pai como pares (codigo_filho, quantidade)."""
@@ -17,7 +19,7 @@ def _iterar_componentes(estrutura_pai) -> list[tuple[str, float]]:
 def cadastrar_estrutura(dados: dict) -> None:
     """Cadastra os componentes (filhos) de um item pai, respeitando os níveis (PA -> SA -> MP) (RF03, RN03)."""
     print("\n--- CADASTRO DE ESTRUTURA (BOM) ---")
-    pai = input("Código do item Pai (ex: PA-001, SA-010): ").strip().upper()
+    pai = ler_codigo("Código do item Pai (ex: PA-001, SA-010): ")
 
     if pai not in dados["itens"]:
         print(f"ERRO: O item pai {pai} não está cadastrado no sistema.")
@@ -30,7 +32,7 @@ def cadastrar_estrutura(dados: dict) -> None:
 
     print(f"Item Pai selecionado: {pai} ({dados['itens'][pai]['descricao']}) [Tipo: {tipo_pai}]")
 
-    filho = input("Código do componente filho (ex: SA-010, MP-100): ").strip().upper()
+    filho = ler_codigo("Código do componente filho (ex: SA-010, MP-100): ")
     if filho not in dados["itens"]:
         print(f"ERRO: O componente {filho} não está cadastrado no sistema.")
         return
@@ -49,15 +51,12 @@ def cadastrar_estrutura(dados: dict) -> None:
         print("ERRO (RN03): Um Semiacabado (SA) só pode ter Matérias-Primas (MP) como componentes diretos.")
         return
 
-    try:
-        quantidade = float(
-            input(f"Quantidade unitária de {filho} necessária para 1 unidade de {pai}: ").strip()
-        )
-        if quantidade <= 0:
-            print("ERRO: A quantidade deve ser maior que zero.")
-            return
-    except ValueError:
-        print("ERRO: Valor numérico inválido.")
+    quantidade = ler_float(
+        f"Quantidade unitária de {filho} necessária para 1 unidade de {pai}: ",
+        minimo=0.0001,
+    )
+    if quantidade is None:
+        print("ERRO: A quantidade deve ser maior que zero.")
         return
 
     if pai not in dados["estrutura"] or not isinstance(dados["estrutura"][pai], dict):
@@ -102,10 +101,9 @@ def gerenciar_estrutura(dados: dict) -> None:
         if op == "1":
             cadastrar_estrutura(dados)
         elif op == "2":
-            cod = input("Digite o código do Produto Acabado (ex: PA-001): ").strip().upper()
+            cod = ler_codigo("Digite o código do Produto Acabado (ex: PA-001): ")
             exibir_bom_indenta(cod, dados)
         elif op == "0":
             break
         else:
             print("ERRO: Opção inválida.")
-            
