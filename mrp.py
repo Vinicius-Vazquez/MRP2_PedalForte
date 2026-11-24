@@ -1,5 +1,7 @@
 """Módulo de cálculo do MRP (Material Requirements Planning) por explosão de necessidades (RF08, RF09, RN04-RN08)."""
 
+from utils import iterar_componentes
+
 HORIZONTE_SEMANAS = 8
 
 
@@ -35,7 +37,7 @@ def _explodir_necessidades(
         for semana in range(HORIZONTE_SEMANAS):
             qtd_pai_nec = necessidades_brutas[pai][semana]
             if qtd_pai_nec > 0:
-                for filho, proporcao in _iterar_componentes(comps):
+                for filho, proporcao in iterar_componentes(comps):
                     if filho in necessidades_brutas and filho in itens:
                         if itens[filho].get("tipo") in tipos_destino_permitidos:
                             necessidades_brutas[filho][semana] += qtd_pai_nec * proporcao

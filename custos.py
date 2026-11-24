@@ -1,5 +1,7 @@
 """Módulo de cálculo de custo padrão dos produtos (materiais + centros de trabalho) (RF13)."""
 
+from utils import iterar_componentes
+
 
 def _iterar_componentes(estrutura_pai) -> list[tuple[str, float]]:
     """Normaliza os componentes de um item pai como pares (codigo_filho, quantidade)."""
@@ -40,7 +42,7 @@ def calcular_custo_produto(codigo: str, dados: dict, visitados=None) -> float:
     # 1. Custo dos materiais componentes (BOM)
     estrutura = dados.get("estrutura", {})
     if codigo in estrutura:
-        for filho_cod, qtd in _iterar_componentes(estrutura[codigo]):
+        for filho_cod, qtd in iterar_componentes(estrutura[codigo]):
             custo_filho = calcular_custo_produto(filho_cod, dados, visitados.copy())
             custo_total += custo_filho * qtd
 

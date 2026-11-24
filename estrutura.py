@@ -1,6 +1,6 @@
 """Módulo de gerenciamento e explosão da Estrutura de Produto (BOM) em até 3 níveis (RF03, RN03)."""
 
-from utils import ler_codigo, ler_float
+from utils import iterar_componentes, ler_codigo, ler_float
 
 
 def _iterar_componentes(estrutura_pai) -> list[tuple[str, float]]:
@@ -82,7 +82,7 @@ def exibir_bom_indenta(codigo: str, dados: dict, nivel: int = 0) -> None:
         print(f"\n{codigo} {item['descricao']} ({item['unidade']})")
 
     if codigo in dados["estrutura"]:
-        for filho_cod, qtd in _iterar_componentes(dados["estrutura"][codigo]):
+        for filho_cod, qtd in iterar_componentes(dados["estrutura"][codigo]):
             if filho_cod in dados["itens"]:
                 filho_item = dados["itens"][filho_cod]
                 tracos = "|   " * nivel + "|--- "

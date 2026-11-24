@@ -1,7 +1,7 @@
 """Módulo de geração, consulta e gestão de Ordens de Produção (OP) e Ordens de Compra (OC) (RF09-RF11, RN02, RN07-RN10)."""
 
 from datetime import datetime
-from utils import ler_codigo
+from utils import iterar_componentes, ler_codigo
 
 HORIZONTE_SEMANAS = 8
 
@@ -220,7 +220,7 @@ def apontar_producao(dados: dict) -> None:
 
     estoque = dados.setdefault("estoque", {})
     estrutura_pai = dados.get("estrutura", {}).get(item_pai)
-    componentes = _iterar_componentes_bom(estrutura_pai)
+    componentes = iterar_componentes(estrutura_pai)
 
     # 1. Verifica disponibilidade de todos os componentes antes de alterar qualquer saldo (RN02)
     faltantes: list[str] = []

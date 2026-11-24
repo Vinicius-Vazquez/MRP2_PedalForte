@@ -155,3 +155,16 @@ def confirmar(prompt: str, padrao: bool = False) -> bool:
         if resposta in nao_opcoes:
             return False
         print("Erro: responda com 's' (sim) ou 'n' (não).")
+
+
+def iterar_componentes(estrutura_pai: object) -> list[tuple[str, float]]:
+    """Normaliza os componentes de um item pai na BOM como pares (codigo_filho, quantidade)."""
+    if isinstance(estrutura_pai, dict):
+        return [(str(filho), float(qtd)) for filho, qtd in estrutura_pai.items()]
+    if isinstance(estrutura_pai, list):
+        pares: list[tuple[str, float]] = []
+        for comp in estrutura_pai:
+            if isinstance(comp, dict) and "componente" in comp and "quantidade" in comp:
+                pares.append((str(comp["componente"]), float(comp["quantidade"])))
+        return pares
+    return []
