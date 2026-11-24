@@ -3,6 +3,68 @@
 TIPOS_VALIDOS = {"PA": "Produto Acabado", "SA": "Semiacabado", "MP": "Matéria-Prima"}
 
 
+def alterar_item(dados: dict) -> None:
+    """Altera os dados editáveis de um item existente preservando código e tipo (RF02, RN01)."""
+    print("\n--- ALTERAÇÃO DE ITEM ---")
+    if not dados.get("itens"):
+        print("ERRO: Nenhum item cadastrado para alterar.")
+        return
+
+    codigo = input("Digite o código do item que deseja alterar (ex: PA-001, MP-100): ").strip().upper()
+    item = dados["itens"].get(codigo)
+    if not item:
+        print(f"ERRO: Item '{codigo}' não encontrado.")
+        return
+
+    print(f"Editando {codigo} [Tipo: {item['tipo']}] — deixe em branco para manter o valor atual.")
+
+    nova_descricao = input(f"Descrição [{item['descricao']}]: ").strip()
+    if nova_descricao:
+        item["descricao"] = nova_descricao
+
+    nova_unidade = input(f"Unidade de medida [{item['unidade']}]: ").strip()
+    if nova_unidade:
+        item["unidade"] = nova_unidade
+
+    try:
+        entrada_custo = input(f"Custo unitário (R$) [{item['custo_unitario']:.2f}]: ").strip().replace(",", ".")
+        if entrada_custo:
+            custo = float(entrada_custo)
+            if custo < 0:
+                print("ERRO: Custo unitário não pode ser negativo. Alteração cancelada.")
+                return
+            item["custo_unitario"] = custo
+
+        entrada_lt = input(f"Lead time (semanas) [{item['lead_time']}]: ").strip()
+        if entrada_lt:
+            lt = int(entrada_lt)
+            if lt < 0:
+                print("ERRO: Lead time não pode ser negativo. Alteração cancelada.")
+                return
+            item["lead_time"] = lt
+
+        entrada_es = input(f"Estoque de segurança [{item['estoque_seguranca']:.1f}]: ").strip().replace(",", ".")
+        if entrada_es:
+            es = float(entrada_es)
+            if es < 0:
+                print("ERRO: Estoque de segurança não pode ser negativo. Alteração cancelada.")
+                return
+            item["estoque_seguranca"] = es
+
+        entrada_lote = input(f"Lote mínimo [{item['lote_minimo']:.1f}]: ").strip().replace(",", ".")
+        if entrada_lote:
+            lote = float(entrada_lote)
+            if lote < 0:
+                print("ERRO: Lote mínimo não pode ser negativo. Alteração cancelada.")
+                return
+            item["lote_minimo"] = lote
+    except ValueError:
+        print("ERRO: Valor numérico inválido. Alteração cancelada.")
+        return
+
+    print(f"Sucesso: Item '{codigo}' atualizado!")
+
+
 def validar_codigo_item(codigo: str) -> bool:
     """Valida se o código do item segue estritamente o formato Tipo-Número (ex: PA-001, SA-020)."""
     partes = codigo.strip().upper().split("-")
@@ -81,12 +143,15 @@ def gerenciar_itens(dados: dict) -> None:
         print("\n--- GESTÃO DE ITENS ---")
         print("1. Cadastrar novo item")
         print("2. Listar itens cadastrados")
+        print("3. Alterar item existente")
         print("0. Voltar ao menu anterior")
         op = input("Escolha uma opção: ").strip()
         if op == "1":
             cadastrar_item(dados)
         elif op == "2":
             listar_itens(dados)
+        elif op == "3":
+            alterar_item(dados)
         elif op == "0":
             break
         else:
