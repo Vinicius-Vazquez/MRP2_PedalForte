@@ -3,19 +3,6 @@
 from utils import iterar_componentes
 
 
-def _iterar_componentes(estrutura_pai) -> list[tuple[str, float]]:
-    """Normaliza os componentes de um item pai como pares (codigo_filho, quantidade)."""
-    if isinstance(estrutura_pai, dict):
-        return [(str(filho), float(qtd)) for filho, qtd in estrutura_pai.items()]
-    if isinstance(estrutura_pai, list):
-        pares: list[tuple[str, float]] = []
-        for comp in estrutura_pai:
-            if isinstance(comp, dict) and "componente" in comp and "quantidade" in comp:
-                pares.append((str(comp["componente"]), float(comp["quantidade"])))
-        return pares
-    return []
-
-
 def calcular_custo_produto(codigo: str, dados: dict, visitados=None) -> float:
     """Calcula recursivamente o custo padrão de um item (PA, SA ou MP) (RF13)."""
     if visitados is None:

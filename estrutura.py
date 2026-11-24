@@ -3,19 +3,6 @@
 from utils import iterar_componentes, ler_codigo, ler_float
 
 
-def _iterar_componentes(estrutura_pai) -> list[tuple[str, float]]:
-    """Normaliza os componentes de um item pai como pares (codigo_filho, quantidade)."""
-    if isinstance(estrutura_pai, dict):
-        return [(str(filho), float(qtd)) for filho, qtd in estrutura_pai.items()]
-    if isinstance(estrutura_pai, list):
-        pares: list[tuple[str, float]] = []
-        for comp in estrutura_pai:
-            if isinstance(comp, dict) and "componente" in comp and "quantidade" in comp:
-                pares.append((str(comp["componente"]), float(comp["quantidade"])))
-        return pares
-    return []
-
-
 def cadastrar_estrutura(dados: dict) -> None:
     """Cadastra os componentes (filhos) de um item pai, respeitando os níveis (PA -> SA -> MP) (RF03, RN03)."""
     print("\n--- CADASTRO DE ESTRUTURA (BOM) ---")

@@ -24,19 +24,6 @@ def _proximo_codigo_ordem(ordens: dict, prefixo: str) -> str:
     return f"{prefixo}-{maior_num + 1:03d}"
 
 
-def _iterar_componentes_bom(estrutura_pai) -> list[tuple[str, float]]:
-    """Extrai pares (codigo_componente, quantidade_por_unidade) da BOM."""
-    if isinstance(estrutura_pai, dict):
-        return [(str(filho), float(qtd)) for filho, qtd in estrutura_pai.items()]
-    if isinstance(estrutura_pai, list):
-        pares: list[tuple[str, float]] = []
-        for comp in estrutura_pai:
-            if isinstance(comp, dict) and "componente" in comp and "quantidade" in comp:
-                pares.append((str(comp["componente"]), float(comp["quantidade"])))
-        return pares
-    return []
-
-
 def _registrar_movimento_kardex(
     dados: dict,
     codigo_item: str,
