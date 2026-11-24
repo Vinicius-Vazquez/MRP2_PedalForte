@@ -2,6 +2,7 @@
 
 from datetime import datetime
 from mrp import HORIZONTE_SEMANAS
+from utils import ler_codigo
 
 
 def _garantir_estrutura_ordens(dados: dict) -> dict:
@@ -155,7 +156,7 @@ def _alterar_status_ordem(dados: dict, status_esperado: str, novo_status: str, a
         print("ERRO: Não há ordens cadastradas.")
         return
 
-    cod = input(f"Código da ordem para {acao_label} (ex.: OP-001 ou OC-001): ").strip().upper()
+    cod = ler_codigo(f"Código da ordem para {acao_label} (ex.: OP-001 ou OC-001): ")
     ordem = ordens.get(cod)
     if not isinstance(ordem, dict):
         print(f"ERRO: Ordem '{cod}' não encontrada.")
@@ -196,7 +197,7 @@ def apontar_producao(dados: dict) -> None:
         print("ERRO: Não há ordens cadastradas.")
         return
 
-    cod_op = input("Código da OP para apontar (ex.: OP-001): ").strip().upper()
+    cod_op = ler_codigo("Código da OP para apontar (ex.: OP-001): ")
     ordem = ordens.get(cod_op)
     if not isinstance(ordem, dict):
         print(f"ERRO: Ordem '{cod_op}' não encontrada.")
