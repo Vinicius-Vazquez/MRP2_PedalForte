@@ -1,5 +1,7 @@
 """Módulo de gerenciamento do Plano Mestre de Produção (MPS) para horizonte de 8 semanas (RF07)."""
 
+from utils import ler_float, ler_inteiro
+
 HORIZONTE_SEMANAS = 8
 
 
@@ -19,13 +21,13 @@ def gerenciar_mps(dados: dict) -> None:
         desc = dados["itens"][pa]["descricao"]
         print(f"{idx}. {pa} - {desc}")
 
-    try:
-        escolha = int(input("Escolha o número do produto para gerenciar o MPS: ").strip())
-        if escolha < 1 or escolha > len(produtos_acabados):
-            print("ERRO: Opção inválida.")
-            return
-    except ValueError:
-        print("ERRO: Valor numérico inválido.")
+    escolha = ler_inteiro(
+        "Escolha o número do produto para gerenciar o MPS: ",
+        minimo=1,
+        maximo=len(produtos_acabados),
+    )
+    if escolha is None:
+        print("ERRO: Opção inválida.")
         return
 
     pa_selecionado = produtos_acabados[escolha - 1]
@@ -47,20 +49,24 @@ def gerenciar_mps(dados: dict) -> None:
         
         op = input("Escolha uma opção: ").strip()
         if op == "1":
-            try:
-                semana = int(input(f"Digite o número da semana (1 a {HORIZONTE_SEMANAS}): ").strip())
-                if semana < 1 or semana > HORIZONTE_SEMANAS:
-                    print(f"ERRO: A semana deve estar entre 1 e {HORIZONTE_SEMANAS}.")
-                    continue
-                nova_demanda = float(input(f"Nova demanda para a semana {semana}: ").strip())
-                if nova_demanda < 0:
-                    print("ERRO: A demanda não pode ser negativa.")
-                    continue
-                demandas[semana - 1] = nova_demanda
-                dados["mps"][pa_selecionado] = demandas
-                print(f"Sucesso: Demanda da semana {semana} atualizada para {nova_demanda:.1f}!")
-            except ValueError:
-                print("ERRO: Valores numéricos inválidos.")
+            semana = ler_inteiro(
+                f"Digite o número da semana (1 a {HORIZONTE_SEMANAS}): ",
+                minimo=1,
+                maximo=HORIZONTE_SEMANAS,
+            )
+            if semana is None:
+                continue
+
+            nova_demanda = ler_float(
+                f"Nova demanda para a semana {semana}: ",
+                minimo=0.0,
+            )
+            if nova_demanda is None:
+                continue
+
+            demandas[semana - 1] = nova_demanda
+            dados["mps"][pa_selecionado] = demandas
+            print(f"Sucesso: Demanda da semana {semana} atualizada para {nova_demanda:.1f}!")
         elif op == "0":
             print("Plano Mestre de Produção salvo com sucesso!")
             break
