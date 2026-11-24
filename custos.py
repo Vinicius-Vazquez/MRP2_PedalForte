@@ -24,7 +24,7 @@ def calcular_custo_produto(codigo: str, dados: dict, visitados=None) -> float:
 
     visitados.add(codigo)
 
-    if codigo not in dados["itens"]:
+    if codigo not in dados.get("itens", {}):
         return 0.0
 
     item = dados["itens"][codigo]
@@ -32,25 +32,27 @@ def calcular_custo_produto(codigo: str, dados: dict, visitados=None) -> float:
 
     # Se for Matéria-Prima, o custo é o custo unitário direto cadastrado
     if tipo == "MP":
-        return float(item["custo_unitario"])
+        return float(item.get("custo_unitario", 0.0))
 
     # Se for PA ou SA, o custo é a soma do custo dos componentes filhos + custo de processamento no centro
     custo_total = 0.0
 
     # 1. Custo dos materiais componentes (BOM)
-    if codigo in dados["estrutura"]:
-        for filho_cod, qtd in _iterar_componentes(dados["estrutura"][codigo]):
+    if codigo in estrutura:
+        for filho_cod, qtd in _iterar_componentes(estrutura[codigo]):
             custo_filho = calcular_custo_produto(filho_cod, dados, visitados.copy())
             custo_total += custo_filho * qtd
 
     # 2. Custo de processamento baseado no roteiro e centro de trabalho
-    if codigo in dados["roteiros"]:
-        roteiro = dados["roteiros"][codigo]
-        ct_cod = roteiro["centro"]
-        tempo_unitario = float(roteiro["tempo_unitario"])  # em horas
+    roteiros = dados.get("roteiros", {})
+    centros = dados.get("centros", {})
+    if codigo in roteiros:
+        roteiro = roteiros[codigo]
+        ct_cod = roteiro.get("centro")
+        tempo_unitario = float(roteiro.get("tempo_unitario", 0.0))  # em horas
 
-        if ct_cod in dados["centros"]:
-            custo_hora = float(dados["centros"][ct_cod]["custo_hora"])
+        if ct_cod in centros:
+            custo_hora = float(centros[ct_cod].get("custo_hora", 0.0))
             custo_total += tempo_unitario * custo_hora
 
     return custo_total
@@ -60,7 +62,7 @@ def gerenciar_custos(dados: dict) -> None:
     """Calcula e exibe o relatório de custo padrão de todos os produtos do sistema (RF13)."""
     print("\n--- RELATÓRIO DE CUSTO PADRÃO DOS PRODUTOS ---")
 
-    if not dados["itens"]:
+    if not dados.get("itens"):
         print("ERRO: Nenhum item cadastrado.")
         return
 
