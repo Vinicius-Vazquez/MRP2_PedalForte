@@ -1,4 +1,5 @@
 """Módulo de cadastro de centros de trabalho, roteiros e análise de Carga x Capacidade (CRP) (RF06, RF12)."""
+
 from utils import ler_codigo, ler_float, ler_texto_obrigatorio
 
 HORIZONTE_SEMANAS = 8
@@ -90,7 +91,7 @@ def cadastrar_roteiro(dados: dict) -> None:
     dados["roteiros"][item_cod] = {
         "item": item_cod,
         "centro": centro_cod,
-        "tempo_unitario": tempo
+        "tempo_unitario": tempo,
     }
     print(f"Sucesso: Roteiro do item '{item_cod}' vinculado ao centro '{centro_cod}' ({tempo} h/un)!")
 
@@ -168,21 +169,30 @@ def analisar_capacidade(dados: dict) -> None:
         print("\nAviso: Nenhuma OP com status 'LIBERADA' encontrada no momento (carga exibida: 0.0h).")
 
     for ct_cod, ct_info in sorted(dados["centros"].items()):
-        capacidade_disponivel = ct_info["capacidade_semanal"]
+        capacidade_disponivel = float(ct_info.get("capacidade_semanal", 0.0))
         cargas_semana = carga_centros[ct_cod]
 
         print(f"\nCentro: {ct_cod} - {ct_info['descricao']} (Capacidade Semanal: {capacidade_disponivel:.1f} h)")
-        print("  Semana        | " + " | ".join([f"S{i}" for i in range(1, HORIZONTE_SEMANAS + 1)]))
-        print("  " + "-" * 70)
-        print("  Carga (h)     | " + " | ".join([f"{x:<5.1f}" for x in cargas_semana]))
+        print(f"  {'Sem':<4} | {'Carga(h)':<9} | {'Uso(%)':<8} | {'Gráfico / Status'}")
+        print("  " + "-" * 68)
 
         tem_sobrecarga = False
-        for s, carga in enumerate(cargas_semana):
+        for idx, carga in enumerate(cargas_semana, start=1):
+            uso_pct = (carga / capacidade_disponivel) * 100.0 if capacidade_disponivel > 0 else 0.0
+            qtd_blocos = min(int(round(uso_pct / 10.0)), 30)
+            barra = "#" * qtd_blocos
+
             if carga > capacidade_disponivel:
                 tem_sobrecarga = True
-                print(f"  -> ALERTA: Sobrecarga na Semana {s+1}! Carga ({carga:.1f}h) excede a capacidade ({capacidade_disponivel:.1f}h).")
+                status_barra = f"{barra} SOBRECARGA".strip()
+            else:
+                status_barra = barra
 
-        if not tem_sobrecarga:
+            print(f"  {idx:<4} | {carga:<9.1f} | {uso_pct:<7.1f}% | {status_barra}")
+
+        if tem_sobrecarga:
+            print("  -> ALERTA: Há semana(s) com carga acima da capacidade disponível (RN09)!")
+        else:
             print("  -> Status: Capacidade OK em todas as semanas do horizonte.")
 
     print("\n" + "=" * 90)

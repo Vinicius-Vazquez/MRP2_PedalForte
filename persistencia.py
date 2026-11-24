@@ -75,7 +75,7 @@ def carregar_dados() -> dict:
         "roteiros": {},
         "mps": {},
         "ordens": {},
-        "movimentos": []
+        "movimentos": [],
     }
 
     arquivos = {
@@ -85,7 +85,7 @@ def carregar_dados() -> dict:
         "centros": "centros.json",
         "roteiros": "roteiros.json",
         "mps": "mps.json",
-        "ordens": "ordens.json"
+        "ordens": "ordens.json",
     }
 
     for chave, nome_arquivo in arquivos.items():
@@ -93,12 +93,26 @@ def carregar_dados() -> dict:
         if os.path.exists(caminho):
             try:
                 with open(caminho, "r", encoding="utf-8") as f:
-                    dados[chave] = json.load(f)
+                    conteudo = json.load(f)
+                if isinstance(conteudo, dict):
+                    dados[chave] = conteudo
+                else:
+                    print(
+                        f"Aviso: Estrutura inválida em {nome_arquivo} "
+                        f"(esperado objeto/dicionário). Mantendo valor padrão."
+                    )
             except Exception as e:
                 print(f"Aviso: Não foi possível carregar {nome_arquivo}: {e}")
 
     caminho_movimentos = os.path.join(DIRETORIO_DADOS, ARQUIVO_MOVIMENTOS)
-    dados["movimentos"] = _carregar_movimentos_csv(caminho_movimentos)
+    movimentos_carregados = _carregar_movimentos_csv(caminho_movimentos)
+    if isinstance(movimentos_carregados, list):
+        dados["movimentos"] = movimentos_carregados
+    else:
+        print(
+            f"Aviso: Estrutura inválida em {ARQUIVO_MOVIMENTOS} "
+            f"(esperada lista). Mantendo histórico vazio."
+        )
 
     return dados
 
