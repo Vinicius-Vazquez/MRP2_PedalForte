@@ -61,9 +61,9 @@ def gerenciar_custos(dados: dict) -> None:
 
     for codigo, item in sorted(dados["itens"].items()):
         custo = calcular_custo_produto(codigo, dados)
-        # Atualiza o custo unitário calculado no dicionário do item
-        item["custo_unitario"] = custo
+        # Preserva o custo_unitario original e registra o custo padrão calculado
+        item["custo_padrao"] = custo
         print(f"{codigo:<10} | {item['tipo']:<5} | {item['descricao']:<35} | R$ {custo:<12.2f}")
 
     print("-" * 75)
-    print("Cálculo e atualização de custos padrões concluídos com sucesso!")
+    print("Cálculo de custos padrões concluído com sucesso!")

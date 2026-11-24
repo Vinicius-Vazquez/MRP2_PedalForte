@@ -1,13 +1,13 @@
-"""Módulo de controle de estoque, saldos e histórico (Kardex) (RF04, RF05, RN02, RN10)."""
+"""Módulo de controle de estoque, saldos e histórico (Kardex) (RF04, RF05, RN02, RN10)."""[cite: 1, 2, 3, 4]
 
 from datetime import datetime
-from utils import ler_codigo, ler_float, ler_inteiro, normalizar_texto
+from utils import ler_codigo, ler_float, ler_inteiro, normalizar_texto[cite: 1]
 
 
 def movimentar_estoque(dados: dict) -> None:
-    """Registra entrada, saída ou ajuste de estoque, atualizando saldo e kardex (RF04, RN02, RN10)."""
+    """Registra entrada, saída ou ajuste de estoque, atualizando saldo e kardex (RF04, RN02, RN10)."""[cite: 1, 2, 3, 4]
     print("\n--- MOVIMENTAÇÃO DE ESTOQUE ---")
-    codigo = ler_codigo("Digite o código do item (ex: MP-202, SA-010): ")
+    codigo = ler_codigo("Digite o código do item (ex: MP-202, SA-010): ")[cite: 1]
     if codigo not in dados["itens"]:
         print(f"ERRO: Item {codigo} não cadastrado no sistema.")
         return
@@ -19,14 +19,14 @@ def movimentar_estoque(dados: dict) -> None:
 
     sigla_tipo = "ENTRADA" if tipo_mov == "E" else ("SAIDA" if tipo_mov == "S" else "AJUSTE")
 
-    quantidade = ler_float("Quantidade: ", minimo=0.0001)
+    quantidade = ler_float("Quantidade: ", minimo=0.0001)[cite: 1]
     if quantidade is None:
         print("ERRO: A quantidade deve ser maior que zero.")
         return
-    
+
     documento = normalizar_texto(
         input("Documento de origem ou motivo (ex: NF 4521, OP-0003, Inventário): ")
-    )
+    )[cite: 1]
     if not documento:
         documento = "Movimentação manual"
 
@@ -43,25 +43,23 @@ def movimentar_estoque(dados: dict) -> None:
         novo_saldo = saldo_atual + quantidade
     elif sigla_tipo == "SAIDA":
         if quantidade > saldo_atual:
-            print(f"ERRO: saldo insuficiente (saldo atual: {saldo_atual:.1f} un). Operação cancelada. (RN02)")
+            print(f"ERRO: saldo insuficiente (saldo atual: {saldo_atual:.1f} un). Operação cancelada. (RN02)")[cite: 1, 3]
             return
         novo_saldo = saldo_atual - quantidade
     else:  # AJUSTE
-        sinal_ajuste = ler_inteiro(
-            "O ajuste é positivo (1) ou negativo (-1)? Digite 1 ou -1: ",
-            minimo=-1,
-            maximo=1,
-        )
-        while sinal_ajuste == 0:
-            print("Erro: digite apenas 1 ou -1.")
+        while True:
             sinal_ajuste = ler_inteiro(
                 "O ajuste é positivo (1) ou negativo (-1)? Digite 1 ou -1: ",
                 minimo=-1,
                 maximo=1,
-            )
+            )[cite: 1]
+            if sinal_ajuste in (-1, 1):
+                break
+            print("Erro: digite apenas 1 ou -1.")
+
         delta = quantidade * sinal_ajuste
         if saldo_atual + delta < 0:
-            print(f"ERRO: O ajuste deixaria o saldo negativo ({saldo_atual + delta:.1f}). Operação cancelada. (RN02)")
+            print(f"ERRO: O ajuste deixaria o saldo negativo ({saldo_atual + delta:.1f}). Operação cancelada. (RN02)")[cite: 1, 3]
             return
         novo_saldo = saldo_atual + delta
         quantidade = delta
@@ -76,7 +74,7 @@ def movimentar_estoque(dados: dict) -> None:
         "tipo": sigla_tipo,
         "quantidade": quantidade if sigla_tipo != "SAIDA" else -quantidade,
         "saldo": novo_saldo,
-        "documento": documento
+        "documento": documento,
     }
     dados["movimentos"].append(movimento)
 
@@ -84,10 +82,10 @@ def movimentar_estoque(dados: dict) -> None:
 
 
 def consultar_kardex(dados: dict) -> None:
-    """Consulta o saldo atual e o extrato (Kardex) de um item, alertando estoque de segurança (RF05)."""
+    """Consulta o saldo atual e o extrato (Kardex) de um item, alertando estoque de segurança (RF05)."""[cite: 1, 2]
     print("\n--- CONSULTA DE KARDEX E SALDO ---")
-    codigo = ler_codigo("Digite o código do item (ex: MP-202, PA-001): ")
-    
+    codigo = ler_codigo("Digite o código do item (ex: MP-202, PA-001): ")[cite: 1]
+
     if codigo not in dados["itens"]:
         print(f"ERRO: Item {codigo} não cadastrado.")
         return
@@ -115,7 +113,7 @@ def consultar_kardex(dados: dict) -> None:
     print("-" * 75)
     # Alerta de estoque de segurança (RF05)
     if saldo < est_seg:
-        print(f"ALERTA: saldo ({saldo:.1f} un) abaixo do estoque de segurança ({est_seg:.1f} un)!")
+        print(f"ALERTA: saldo ({saldo:.1f} un) abaixo do estoque de segurança ({est_seg:.1f} un)!")[cite: 1, 2]
 
 
 def gerenciar_estoque(dados: dict) -> None:

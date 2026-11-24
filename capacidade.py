@@ -105,7 +105,11 @@ def listar_roteiros(dados: dict) -> None:
     print(f"{'Item':<10} | {'Centro':<10} | {'Tempo Unitário (h/un)':<22}")
     print("-" * 48)
     for item_cod, rot in sorted(dados["roteiros"].items()):
-        print(f"{item_cod:<10} | {rot['centro']:<10} | {rot['tempo_unitario']:<22.2f}")
+        try:
+            tempo = float(rot["tempo_unitario"])
+        except (KeyError, ValueError, TypeError):
+            tempo = 0.0
+        print(f"{item_cod:<10} | {rot['centro']:<10} | {tempo:<22.4f}")
 
 
 def gerenciar_roteiros(dados: dict) -> None:
@@ -153,9 +157,12 @@ def analisar_capacidade(dados: dict) -> None:
             if tipo_item in ["PA", "SA"] and codigo in dados["roteiros"]:
                 roteiro = dados["roteiros"][codigo]
                 centro = roteiro["centro"]
-                tempo_unitario = float(roteiro["tempo_unitario"])
-                semana_lib = int(ordem.get("semana_liberacao", ordem.get("semana", 0)))
-                qtd_produzir = float(ordem.get("quantidade", 0.0))
+                try:
+                    tempo_unitario = float(roteiro["tempo_unitario"])
+                    semana_lib = int(ordem.get("semana_liberacao", ordem.get("semana", 0)))
+                    qtd_produzir = float(ordem.get("quantidade", 0.0))
+                except (KeyError, ValueError, TypeError):
+                    continue
 
                 if centro in carga_centros and 1 <= semana_lib <= HORIZONTE_SEMANAS and qtd_produzir > 0:
                     carga_centros[centro][semana_lib - 1] += qtd_produzir * tempo_unitario
