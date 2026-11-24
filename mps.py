@@ -72,4 +72,3 @@ def gerenciar_mps(dados: dict) -> None:
             break
         else:
             print("ERRO: Opção inválida.")
-            
