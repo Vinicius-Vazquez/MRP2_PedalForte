@@ -1,70 +1,5 @@
 from __future__ import annotations
 
-from datetime import datetime
-import os
-from typing import Iterable, Sequence
-
-
-def limpar_tela() -> None:
-    """Limpa o terminal de forma compatível com Windows e sistemas Unix."""
-    os.system("cls" if os.name == "nt" else "clear")
-
-
-def pausar(mensagem: str = "\nPressione ENTER para continuar...") -> None:
-    """Pausa a execução até que o usuário pressione ENTER."""
-    input(mensagem)
-
-
-def exibir_cabecalho(titulo: str, largura: int = 60, subtitulo: str | None = None) -> None:
-    """Exibe um cabeçalho centralizado no terminal."""
-    largura_efetiva = max(20, int(largura))
-    borda = "=" * largura_efetiva
-    print(f"\n{borda}")
-    print(titulo.strip().center(largura_efetiva))
-    if subtitulo:
-        print(subtitulo.strip().center(largura_efetiva))
-    print(borda)
-
-
-def exibir_secao(titulo: str, largura: int = 60) -> None:
-    """Exibe um título de seção secundária."""
-    largura_efetiva = max(20, int(largura))
-    print(f"\n--- {titulo.strip()} ---")
-    print("-" * largura_efetiva)
-
-
-def exibir_tabela(
-    colunas: Sequence[str],
-    linhas: Iterable[Sequence[object]],
-    vazio: str = "Nenhum registro encontrado.",
-) -> None:
-    """Exibe uma tabela alinhada no terminal a partir de colunas e linhas."""
-    cabecalhos = [str(c) for c in colunas]
-    dados = [[str(celula) for celula in linha] for linha in linhas]
-
-    if not dados:
-        print(vazio)
-        return
-
-    larguras = [len(h) for h in cabecalhos]
-    for linha in dados:
-        for idx, celula in enumerate(linha):
-            if idx < len(larguras):
-                larguras[idx] = max(larguras[idx], len(celula))
-
-    def formatar_linha(valores: Sequence[str]) -> str:
-        partes = []
-        for idx, largura in enumerate(larguras):
-            valor = valores[idx] if idx < len(valores) else ""
-            partes.append(valor.ljust(largura))
-        return " | ".join(partes)
-
-    separador = "-+-".join("-" * largura for largura in larguras)
-    print(formatar_linha(cabecalhos))
-    print(separador)
-    for linha in dados:
-        print(formatar_linha(linha))
-
 
 def normalizar_codigo(codigo: str) -> str:
     """Normaliza códigos de itens, centros, ordens ou roteiros em maiúsculas e sem espaços extras."""
@@ -91,26 +26,6 @@ def validar_texto_obrigatorio(texto: str, campo: str = "descrição") -> str:
     return normalizado
 
 
-def garantir_nao_negativo(valor: int | float, campo: str = "valor") -> float:
-    """Garante que um valor numérico seja maior ou igual a zero."""
-    if isinstance(valor, bool) or not isinstance(valor, (int, float)):
-        raise ValueError(f"O campo '{campo}' deve ser numérico.")
-    numero = float(valor)
-    if numero < 0:
-        raise ValueError(f"O campo '{campo}' não pode ser negativo (recebido: {numero}).")
-    return numero
-
-
-def garantir_positivo(valor: int | float, campo: str = "valor") -> float:
-    """Garante que um valor numérico seja estritamente maior que zero."""
-    if isinstance(valor, bool) or not isinstance(valor, (int, float)):
-        raise ValueError(f"O campo '{campo}' deve ser numérico.")
-    numero = float(valor)
-    if numero <= 0:
-        raise ValueError(f"O campo '{campo}' deve ser maior que zero (recebido: {numero}).")
-    return numero
-
-
 def validar_semana(semana: int, total_semanas: int = 8) -> int:
     """Valida o número da semana dentro do horizonte planejado (ex.: 1 a 8)."""
     if isinstance(semana, bool) or not isinstance(semana, int):
@@ -120,30 +35,6 @@ def validar_semana(semana: int, total_semanas: int = 8) -> int:
     if semana < 1 or semana > total_semanas:
         raise ValueError(f"A semana deve estar entre 1 e {total_semanas} (recebido: {semana}).")
     return semana
-
-
-def validar_data_iso(data_str: str, campo: str = "data") -> str:
-    """Valida e normaliza uma data no formato YYYY-MM-DD."""
-    if not isinstance(data_str, str):
-        raise ValueError(f"O campo '{campo}' deve ser um texto no formato AAAA-MM-DD.")
-    texto = data_str.strip()
-    try:
-        dt = datetime.strptime(texto, "%Y-%m-%d")
-    except ValueError as exc:
-        raise ValueError(
-            f"O campo '{campo}' deve estar no formato AAAA-MM-DD (recebido: '{texto}')."
-        ) from exc
-    return dt.strftime("%Y-%m-%d")
-
-
-def timestamp_atual() -> str:
-    """Retorna a data e hora atuais formatadas como AAAA-MM-DD HH:MM:SS."""
-    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-
-def data_hoje_iso() -> str:
-    """Retorna a data atual no formato AAAA-MM-DD."""
-    return datetime.now().strftime("%Y-%m-%d")
 
 
 def formatar_numero(valor: int | float, decimais: int = 2) -> str:
