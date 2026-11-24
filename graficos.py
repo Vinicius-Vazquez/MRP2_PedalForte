@@ -168,7 +168,7 @@ def gerar_grafico_crp(dados: dict) -> None:
             item_cod = str(ordem.get("item", ""))
             roteiro = roteiros.get(item_cod)
             if isinstance(roteiro, dict) and str(roteiro.get("centro", "")).upper() == cod_ct:
-                sem = int(ordem.get("semana", 0))
+                sem = int(ordem.get("semana_liberacao", ordem.get("semana", 0)))
                 if 1 <= sem <= 8:
                     carga[sem - 1] += float(ordem.get("quantidade", 0.0)) * float(roteiro.get("tempo_unitario", 0.0))
 

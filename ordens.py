@@ -86,7 +86,7 @@ def gerar_ordens_automaticas(dados: dict) -> None:
             qtd_float = float(qtd)
             if qtd_float > 0:
                 semana_liberacao = idx_sem + 1
-                semana_entrega = min(HORIZONTE_SEMANAS, semana_liberacao + lead_time)
+                semana_entrega = semana_liberacao + lead_time
 
                 if tipo_item in {"PA", "SA"}:
                     num_ordem = _proximo_codigo_ordem(ordens, "OP")
