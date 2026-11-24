@@ -126,6 +126,5 @@ def salvar_dados(dados: dict) -> None:
         except Exception as e:
             print(f"ERRO: Não foi possível salvar {nome_arquivo}: {e}")
 
-        caminho_movimentos = os.path.join(DIRETORIO_DADOS, ARQUIVO_MOVIMENTOS)
-        _salvar_movimentos_csv(caminho_movimentos, dados.get("movimentos", []))
-            
+    caminho_movimentos = os.path.join(DIRETORIO_DADOS, ARQUIVO_MOVIMENTOS)
+    _salvar_movimentos_csv(caminho_movimentos, dados.get("movimentos", []))

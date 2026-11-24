@@ -264,4 +264,3 @@ def confirmar(prompt: str, padrao: bool = False) -> bool:
         if resposta in nao_opcoes:
             return False
         print("Erro: responda com 's' (sim) ou 'n' (não).")
-        

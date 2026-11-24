@@ -83,4 +83,3 @@ def gerenciar_relatorios(dados: dict) -> None:
             break
         else:
             print("ERRO: Opção inválida.")
-            
