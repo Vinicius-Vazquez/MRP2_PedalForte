@@ -5,6 +5,7 @@ import os
 
 DIRETORIO_DADOS = "data"
 
+
 def exportar_relatorio_estoque(dados: dict) -> None:
     """Exporta o saldo atual e os movimentos de estoque para um arquivo CSV dedicado (RF15)."""
     print("\n--- EXPORTANDO RELATÓRIO DE ESTOQUE (CSV) ---")
@@ -35,6 +36,7 @@ def exportar_relatorio_estoque(dados: dict) -> None:
     except Exception as e:
         print(f"ERRO: Não foi possível exportar o arquivo: {e}")
 
+
 def exportar_relatorio_ordens(dados: dict) -> None:
     """Exporta todas as ordens de produção e compra para um arquivo CSV (RF15)."""
     print("\n--- EXPORTANDO RELATÓRIO DE ORDENS (CSV) ---")
@@ -64,6 +66,7 @@ def exportar_relatorio_ordens(dados: dict) -> None:
     except Exception as e:
         print(f"ERRO: Não foi possível exportar o arquivo: {e}")
 
+
 def gerenciar_relatorios(dados: dict) -> None:
     """Submenu para emissão e exportação de relatórios."""
     while True:
@@ -80,3 +83,4 @@ def gerenciar_relatorios(dados: dict) -> None:
             break
         else:
             print("ERRO: Opção inválida.")
+            

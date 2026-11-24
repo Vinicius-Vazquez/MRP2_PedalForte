@@ -4,7 +4,7 @@
         "tipo": "PA",
         "descricao": "Bicicleta Aro 29 MTB",
         "unidade": "un",
-        "custo_unitario": 0.0,
+        "custo_unitario": 940.5,
         "lead_time": 1,
         "estoque_seguranca": 5.0,
         "lote_minimo": 10.0
@@ -14,7 +14,7 @@
         "tipo": "PA",
         "descricao": "Bicicleta Aro 29 Urban",
         "unidade": "un",
-        "custo_unitario": 0.0,
+        "custo_unitario": 557.5,
         "lead_time": 1,
         "estoque_seguranca": 3.0,
         "lote_minimo": 10.0
@@ -24,7 +24,7 @@
         "tipo": "SA",
         "descricao": "Quadro Aro 29 Soldado",
         "unidade": "un",
-        "custo_unitario": 0.0,
+        "custo_unitario": 132.5,
         "lead_time": 2,
         "estoque_seguranca": 5.0,
         "lote_minimo": 20.0
@@ -34,7 +34,7 @@
         "tipo": "SA",
         "descricao": "Roda Aro 29 Montada",
         "unidade": "un",
-        "custo_unitario": 0.0,
+        "custo_unitario": 174.0,
         "lead_time": 1,
         "estoque_seguranca": 10.0,
         "lote_minimo": 40.0

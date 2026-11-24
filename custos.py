@@ -1,5 +1,19 @@
 """Módulo de cálculo de custo padrão dos produtos (materiais + centros de trabalho) (RF13)."""
 
+
+def _iterar_componentes(estrutura_pai) -> list[tuple[str, float]]:
+    """Normaliza os componentes de um item pai como pares (codigo_filho, quantidade)."""
+    if isinstance(estrutura_pai, dict):
+        return [(str(filho), float(qtd)) for filho, qtd in estrutura_pai.items()]
+    if isinstance(estrutura_pai, list):
+        pares: list[tuple[str, float]] = []
+        for comp in estrutura_pai:
+            if isinstance(comp, dict) and "componente" in comp and "quantidade" in comp:
+                pares.append((str(comp["componente"]), float(comp["quantidade"])))
+        return pares
+    return []
+
+
 def calcular_custo_produto(codigo: str, dados: dict, visitados=None) -> float:
     """Calcula recursivamente o custo padrão de um item (PA, SA ou MP) (RF13)."""
     if visitados is None:
@@ -18,16 +32,14 @@ def calcular_custo_produto(codigo: str, dados: dict, visitados=None) -> float:
 
     # Se for Matéria-Prima, o custo é o custo unitário direto cadastrado
     if tipo == "MP":
-        return item["custo_unitario"]
+        return float(item["custo_unitario"])
 
     # Se for PA ou SA, o custo é a soma do custo dos componentes filhos + custo de processamento no centro
     custo_total = 0.0
 
     # 1. Custo dos materiais componentes (BOM)
     if codigo in dados["estrutura"]:
-        for comp in dados["estrutura"][codigo]:
-            filho_cod = comp["componente"]
-            qtd = comp["quantidade"]
+        for filho_cod, qtd in _iterar_componentes(dados["estrutura"][codigo]):
             custo_filho = calcular_custo_produto(filho_cod, dados, visitados.copy())
             custo_total += custo_filho * qtd
 
@@ -35,18 +47,19 @@ def calcular_custo_produto(codigo: str, dados: dict, visitados=None) -> float:
     if codigo in dados["roteiros"]:
         roteiro = dados["roteiros"][codigo]
         ct_cod = roteiro["centro"]
-        tempo_unitario = roteiro["tempo_unitario"]  # em horas
-        
+        tempo_unitario = float(roteiro["tempo_unitario"])  # em horas
+
         if ct_cod in dados["centros"]:
-            custo_hora = dados["centros"][ct_cod]["custo_hora"]
+            custo_hora = float(dados["centros"][ct_cod]["custo_hora"])
             custo_total += tempo_unitario * custo_hora
 
     return custo_total
 
+
 def gerenciar_custos(dados: dict) -> None:
     """Calcula e exibe o relatório de custo padrão de todos os produtos do sistema (RF13)."""
     print("\n--- RELATÓRIO DE CUSTO PADRÃO DOS PRODUTOS ---")
-    
+
     if not dados["itens"]:
         print("ERRO: Nenhum item cadastrado.")
         return
@@ -62,3 +75,4 @@ def gerenciar_custos(dados: dict) -> None:
 
     print("-" * 75)
     print("Cálculo e atualização de custos padrões concluídos com sucesso!")
+    

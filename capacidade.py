@@ -2,6 +2,7 @@
 
 HORIZONTE_SEMANAS = 8
 
+
 def cadastrar_centro_trabalho(dados: dict) -> None:
     """Cadastra um novo Centro de Trabalho (RF06)."""
     print("\n--- CADASTRO DE CENTRO DE TRABALHO ---")
@@ -35,6 +36,7 @@ def cadastrar_centro_trabalho(dados: dict) -> None:
     }
     print(f"Sucesso: Centro de Trabalho '{codigo}' cadastrado!")
 
+
 def listar_centros_trabalho(dados: dict) -> None:
     """Lista os Centros de Trabalho cadastrados."""
     print("\n--- CENTROS DE TRABALHO CADASTRADOS ---")
@@ -45,6 +47,7 @@ def listar_centros_trabalho(dados: dict) -> None:
     print("-" * 78)
     for cod, ct in sorted(dados["centros"].items()):
         print(f"{cod:<10} | {ct['descricao']:<30} | {ct['capacidade_semanal']:<18.1f} | R$ {ct['custo_hora']:<9.2f}")
+
 
 def gerenciar_centros(dados: dict) -> None:
     """Submenu para Centros de Trabalho."""
@@ -62,6 +65,7 @@ def gerenciar_centros(dados: dict) -> None:
             break
         else:
             print("ERRO: Opção inválida.")
+
 
 def cadastrar_roteiro(dados: dict) -> None:
     """Cadastra o roteiro de operação única para um item fabricado (PA ou SA) (RF06)."""
@@ -98,6 +102,7 @@ def cadastrar_roteiro(dados: dict) -> None:
     }
     print(f"Sucesso: Roteiro do item '{item_cod}' vinculado ao centro '{centro_cod}' ({tempo} h/un)!")
 
+
 def listar_roteiros(dados: dict) -> None:
     """Lista os roteiros cadastrados."""
     print("\n--- ROTEIROS DE PRODUÇÃO CADASTRADOS ---")
@@ -108,6 +113,7 @@ def listar_roteiros(dados: dict) -> None:
     print("-" * 48)
     for item_cod, rot in sorted(dados["roteiros"].items()):
         print(f"{item_cod:<10} | {rot['centro']:<10} | {rot['tempo_unitario']:<22.2f}")
+
 
 def gerenciar_roteiros(dados: dict) -> None:
     """Submenu para Roteiros de Produção."""
@@ -125,6 +131,7 @@ def gerenciar_roteiros(dados: dict) -> None:
             break
         else:
             print("ERRO: Opção inválida.")
+
 
 def analisar_capacidade(dados: dict) -> None:
     """Calcula a carga alocada em cada centro de trabalho por semana e compara com a capacidade disponível (RF12)."""

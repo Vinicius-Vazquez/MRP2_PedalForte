@@ -2,6 +2,7 @@
 
 from datetime import datetime
 
+
 def movimentar_estoque(dados: dict) -> None:
     """Registra entrada, saída ou ajuste de estoque, atualizando saldo e kardex (RF04, RN02, RN10)."""
     print("\n--- MOVIMENTAÇÃO DE ESTOQUE ---")
@@ -75,6 +76,7 @@ def movimentar_estoque(dados: dict) -> None:
 
     print(f"Sucesso: Movimentação registrada! Novo saldo de {codigo}: {novo_saldo:.1f} {dados['itens'][codigo]['unidade']}")
 
+
 def consultar_kardex(dados: dict) -> None:
     """Consulta o saldo atual e o extrato (Kardex) de um item, alertando estoque de segurança (RF05)."""
     print("\n--- CONSULTA DE KARDEX E SALDO ---")
@@ -108,6 +110,7 @@ def consultar_kardex(dados: dict) -> None:
     # Alerta de estoque de segurança (RF05)
     if saldo < est_seg:
         print(f"ALERTA: saldo ({saldo:.1f} un) abaixo do estoque de segurança ({est_seg:.1f} un)!")
+
 
 def gerenciar_estoque(dados: dict) -> None:
     """Submenu para gestão de estoque e kardex."""

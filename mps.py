@@ -2,6 +2,7 @@
 
 HORIZONTE_SEMANAS = 8
 
+
 def gerenciar_mps(dados: dict) -> None:
     """Permite visualizar, cadastrar e alterar a demanda semanal dos produtos acabados (PA) (RF07)."""
     print("\n--- PLANO MESTRE DE PRODUÇÃO (MPS) ---")
@@ -65,3 +66,4 @@ def gerenciar_mps(dados: dict) -> None:
             break
         else:
             print("ERRO: Opção inválida.")
+            

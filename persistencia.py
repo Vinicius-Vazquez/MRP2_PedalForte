@@ -1,9 +1,66 @@
 """Módulo de persistência para leitura e salvamento de dados em arquivos JSON e CSV (RF15, RNF07)."""
 
+import csv
 import json
 import os
 
 DIRETORIO_DADOS = "data"
+ARQUIVO_MOVIMENTOS = "movimentos.csv"
+COLUNAS_MOVIMENTOS = ["data", "item", "tipo", "quantidade", "saldo", "documento"]
+
+
+def _carregar_movimentos_csv(caminho_csv: str) -> list[dict]:
+    """Lê o histórico de movimentações (Kardex) de data/movimentos.csv."""
+    if not os.path.exists(caminho_csv):
+        return []
+
+    movimentos: list[dict] = []
+    try:
+        with open(caminho_csv, "r", encoding="utf-8", newline="") as f:
+            leitor = csv.DictReader(f)
+            for linha in leitor:
+                if not linha or not linha.get("item"):
+                    continue
+                try:
+                    quantidade = float(str(linha.get("quantidade", "0")).replace(",", "."))
+                    saldo = float(str(linha.get("saldo", "0")).replace(",", "."))
+                except ValueError:
+                    continue
+
+                movimentos.append({
+                    "data": str(linha.get("data", "")).strip(),
+                    "item": str(linha.get("item", "")).strip().upper(),
+                    "tipo": str(linha.get("tipo", "")).strip().upper(),
+                    "quantidade": quantidade,
+                    "saldo": saldo,
+                    "documento": str(linha.get("documento", "")).strip(),
+                })
+    except Exception as e:
+        print(f"Aviso: Não foi possível carregar {ARQUIVO_MOVIMENTOS}: {e}")
+
+    return movimentos
+
+
+def _salvar_movimentos_csv(caminho_csv: str, movimentos: list) -> None:
+    """Grava o histórico de movimentações (Kardex) em data/movimentos.csv."""
+    try:
+        with open(caminho_csv, "w", encoding="utf-8", newline="") as f:
+            escritor = csv.DictWriter(f, fieldnames=COLUNAS_MOVIMENTOS)
+            escritor.writeheader()
+            for mov in movimentos:
+                if not isinstance(mov, dict):
+                    continue
+                escritor.writerow({
+                    "data": mov.get("data", ""),
+                    "item": mov.get("item", ""),
+                    "tipo": mov.get("tipo", ""),
+                    "quantidade": mov.get("quantidade", 0.0),
+                    "saldo": mov.get("saldo", 0.0),
+                    "documento": mov.get("documento", ""),
+                })
+    except Exception as e:
+        print(f"ERRO: Não foi possível salvar {ARQUIVO_MOVIMENTOS}: {e}")
+
 
 def carregar_dados() -> dict:
     """Carrega todos os dados dos arquivos JSON na pasta data/ ao iniciar o sistema."""
@@ -40,7 +97,11 @@ def carregar_dados() -> dict:
             except Exception as e:
                 print(f"Aviso: Não foi possível carregar {nome_arquivo}: {e}")
 
+    caminho_movimentos = os.path.join(DIRETORIO_DADOS, ARQUIVO_MOVIMENTOS)
+    dados["movimentos"] = _carregar_movimentos_csv(caminho_movimentos)
+
     return dados
+
 
 def salvar_dados(dados: dict) -> None:
     """Salva todos os dicionários do sistema nos arquivos JSON da pasta data/."""
@@ -64,3 +125,7 @@ def salvar_dados(dados: dict) -> None:
                 json.dump(dados[chave], f, ensure_ascii=False, indent=4)
         except Exception as e:
             print(f"ERRO: Não foi possível salvar {nome_arquivo}: {e}")
+
+        caminho_movimentos = os.path.join(DIRETORIO_DADOS, ARQUIVO_MOVIMENTOS)
+        _salvar_movimentos_csv(caminho_movimentos, dados.get("movimentos", []))
+            

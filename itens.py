@@ -2,6 +2,7 @@
 
 TIPOS_VALIDOS = {"PA": "Produto Acabado", "SA": "Semiacabado", "MP": "Matéria-Prima"}
 
+
 def validar_codigo_item(codigo: str) -> bool:
     """Valida se o código do item segue estritamente o formato Tipo-Número (ex: PA-001, SA-020)."""
     partes = codigo.strip().upper().split("-")
@@ -9,6 +10,7 @@ def validar_codigo_item(codigo: str) -> bool:
         return False
     tipo, num = partes[0], partes[1]
     return tipo in TIPOS_VALIDOS and num.isdigit()
+
 
 def cadastrar_item(dados: dict) -> None:
     """Cadastra um novo item aplicando as regras de negócio de formato e unicidade (RF02, RN01)."""
@@ -59,6 +61,7 @@ def cadastrar_item(dados: dict) -> None:
 
     print(f"Sucesso: Item {codigo} cadastrado com sucesso!")
 
+
 def listar_itens(dados: dict) -> None:
     """Lista todos os itens cadastrados no sistema de forma organizada (RF02)."""
     print("\n--- LISTA DE ITENS CADASTRADOS ---")
@@ -70,6 +73,7 @@ def listar_itens(dados: dict) -> None:
     print("-" * 95)
     for codigo, item in sorted(dados["itens"].items()):
         print(f"{codigo:<10} | {item['tipo']:<5} | {item['descricao']:<30} | {item['unidade']:<4} | {item['custo_unitario']:<10.2f} | {item['lead_time']:<3} | {item['estoque_seguranca']:<8.1f} | {item['lote_minimo']:<8.1f}")
+
 
 def gerenciar_itens(dados: dict) -> None:
     """Submenu para gerenciamento de itens."""

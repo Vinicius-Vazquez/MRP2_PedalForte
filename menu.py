@@ -11,6 +11,7 @@ from custos import gerenciar_custos
 from relatorios import gerenciar_relatorios
 from graficos import gerenciar_graficos
 
+
 def sub_menu_cadastros(dados: dict) -> None:
     """Submenu para gerenciamento de cadastros (Itens, Estrutura BOM, Centros e Roteiros)."""
     while True:
@@ -33,6 +34,7 @@ def sub_menu_cadastros(dados: dict) -> None:
             break
         else:
             print("ERRO: Opção inválida.")
+
 
 def exibir_menu_principal(dados: dict) -> None:
     """Exibe o menu principal e direciona para as funcionalidades do sistema."""

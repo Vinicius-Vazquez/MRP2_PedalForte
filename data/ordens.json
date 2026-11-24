@@ -1,1 +1,98 @@
-{}
+{
+    "OC-001": {
+        "codigo_ordem": "OC-001",
+        "tipo": "OC",
+        "item": "MP-100",
+        "quantidade": 100.0,
+        "semana": 1,
+        "status": "PLANEJADA"
+    },
+    "OC-002": {
+        "codigo_ordem": "OC-002",
+        "tipo": "OC",
+        "item": "MP-101",
+        "quantidade": 50.0,
+        "semana": 1,
+        "status": "PLANEJADA"
+    },
+    "OC-003": {
+        "codigo_ordem": "OC-003",
+        "tipo": "OC",
+        "item": "MP-200",
+        "quantidade": 40.0,
+        "semana": 1,
+        "status": "PLANEJADA"
+    },
+    "OC-004": {
+        "codigo_ordem": "OC-004",
+        "tipo": "OC",
+        "item": "MP-201",
+        "quantidade": 200.0,
+        "semana": 1,
+        "status": "PLANEJADA"
+    },
+    "OC-005": {
+        "codigo_ordem": "OC-005",
+        "tipo": "OC",
+        "item": "MP-202",
+        "quantidade": 50.0,
+        "semana": 1,
+        "status": "PLANEJADA"
+    },
+    "OC-006": {
+        "codigo_ordem": "OC-006",
+        "tipo": "OC",
+        "item": "MP-300",
+        "quantidade": 30.0,
+        "semana": 1,
+        "status": "PLANEJADA"
+    },
+    "OC-007": {
+        "codigo_ordem": "OC-007",
+        "tipo": "OC",
+        "item": "MP-301",
+        "quantidade": 20.0,
+        "semana": 1,
+        "status": "PLANEJADA"
+    },
+    "OC-008": {
+        "codigo_ordem": "OC-008",
+        "tipo": "OC",
+        "item": "MP-400",
+        "quantidade": 30.0,
+        "semana": 1,
+        "status": "PLANEJADA"
+    },
+    "OP-001": {
+        "codigo_ordem": "OP-001",
+        "tipo": "OP",
+        "item": "PA-001",
+        "quantidade": 10.0,
+        "semana": 1,
+        "status": "PLANEJADA"
+    },
+    "OP-002": {
+        "codigo_ordem": "OP-002",
+        "tipo": "OP",
+        "item": "PA-002",
+        "quantidade": 10.0,
+        "semana": 1,
+        "status": "PLANEJADA"
+    },
+    "OP-003": {
+        "codigo_ordem": "OP-003",
+        "tipo": "OP",
+        "item": "SA-010",
+        "quantidade": 20.0,
+        "semana": 1,
+        "status": "PLANEJADA"
+    },
+    "OP-004": {
+        "codigo_ordem": "OP-004",
+        "tipo": "OP",
+        "item": "SA-020",
+        "quantidade": 40.0,
+        "semana": 1,
+        "status": "PLANEJADA"
+    }
+}
