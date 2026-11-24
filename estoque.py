@@ -1,6 +1,7 @@
 """Módulo de controle de estoque, saldos e histórico (Kardex) (RF04, RF05, RN02, RN10)."""
-from utils import ler_codigo, ler_float, ler_inteiro
+
 from datetime import datetime
+from utils import ler_codigo, ler_float, ler_inteiro, normalizar_texto
 
 
 def movimentar_estoque(dados: dict) -> None:
@@ -23,7 +24,9 @@ def movimentar_estoque(dados: dict) -> None:
         print("ERRO: A quantidade deve ser maior que zero.")
         return
     
-    documento = input("Documento de origem ou motivo (ex: NF 4521, OP-0003, Inventário): ").strip()
+    documento = normalizar_texto(
+        input("Documento de origem ou motivo (ex: NF 4521, OP-0003, Inventário): ")
+    )
     if not documento:
         documento = "Movimentação manual"
 
@@ -46,11 +49,15 @@ def movimentar_estoque(dados: dict) -> None:
     else:  # AJUSTE
         sinal_ajuste = ler_inteiro(
             "O ajuste é positivo (1) ou negativo (-1)? Digite 1 ou -1: ",
+            minimo=-1,
+            maximo=1,
         )
-        while sinal_ajuste not in (1, -1):
+        while sinal_ajuste == 0:
             print("Erro: digite apenas 1 ou -1.")
             sinal_ajuste = ler_inteiro(
                 "O ajuste é positivo (1) ou negativo (-1)? Digite 1 ou -1: ",
+                minimo=-1,
+                maximo=1,
             )
         delta = quantidade * sinal_ajuste
         if saldo_atual + delta < 0:
