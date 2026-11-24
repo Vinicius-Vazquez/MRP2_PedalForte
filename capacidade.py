@@ -1,4 +1,5 @@
 """Módulo de cadastro de centros de trabalho, roteiros e análise de Carga x Capacidade (CRP) (RF06, RF12)."""
+from utils import ler_float, ler_texto_obrigatorio
 
 HORIZONTE_SEMANAS = 8
 
@@ -6,25 +7,19 @@ HORIZONTE_SEMANAS = 8
 def cadastrar_centro_trabalho(dados: dict) -> None:
     """Cadastra um novo Centro de Trabalho (RF06)."""
     print("\n--- CADASTRO DE CENTRO DE TRABALHO ---")
-    codigo = input("Código do centro (ex: CT-01): ").strip().upper()
-    if not codigo:
-        print("ERRO: Código inválido.")
-        return
+    codigo = ler_codigo("Código do centro (ex: CT-01): ")
     if codigo in dados["centros"]:
         print(f"ERRO: Centro '{codigo}' já cadastrado.")
         return
 
-    descricao = input("Descrição do centro (ex: Usinagem e Solda): ").strip()
-    if not descricao:
-        print("ERRO: Descrição não pode ser vazia.")
-        return
+    descricao = ler_texto_obrigatorio(
+        "Descrição do centro (ex: Usinagem e Solda): ",
+        campo="descrição",
+    )
 
-    try:
-        capacidade = float(input("Capacidade semanal (horas/semana): ").replace(",", "."))
-        custo_hora = float(input("Custo por hora (R$): ").replace(",", "."))
-        if capacidade <= 0 or custo_hora < 0:
-            raise ValueError
-    except ValueError:
+    capacidade = ler_float("Capacidade semanal (horas/semana): ", minimo=0.1)
+    custo_hora = ler_float("Custo por hora (R$): ", minimo=0.0)
+    if capacidade is None or custo_hora is None:
         print("ERRO: Valores numéricos inválidos.")
         return
 
@@ -32,7 +27,7 @@ def cadastrar_centro_trabalho(dados: dict) -> None:
         "codigo": codigo,
         "descricao": descricao,
         "capacidade_semanal": capacidade,
-        "custo_hora": custo_hora
+        "custo_hora": custo_hora,
     }
     print(f"Sucesso: Centro de Trabalho '{codigo}' cadastrado!")
 
@@ -87,12 +82,10 @@ def cadastrar_roteiro(dados: dict) -> None:
         print(f"ERRO: Centro '{centro_cod}' não encontrado.")
         return
 
-    try:
-        tempo = float(input("Tempo unitário de produção (em horas/unidade, ex: 0.5): ").replace(",", "."))
-        if tempo <= 0:
-            raise ValueError
-    except ValueError:
+    tempo = ler_float("Tempo unitário de produção (em horas/unidade, ex: 0.5): ", minimo=0.0001)
+    if tempo is None:
         print("ERRO: Tempo unitário deve ser maior que zero.")
+        return
         return
 
     dados["roteiros"][item_cod] = {
