@@ -69,13 +69,14 @@ def _recebimentos_programados_por_item(dados: dict) -> dict[str, list[float]]:
 
 
 def _limpar_ordens_planejadas(dados: dict) -> None:
-    """Remove ordens com status PLANEJADA antes de recalcular o MRP (RN08)."""
+    """Remove ordens com status PLANEJADA ou ATRASADA antes de recalcular o MRP (RN07, RN08)."""
     ordens = dados.get("ordens")
     if isinstance(ordens, dict):
+        status_removidos = {"PLANEJADA", "ATRASADA"}
         dados["ordens"] = {
             cod: info
             for cod, info in ordens.items()
-            if isinstance(info, dict) and str(info.get("status", "")).upper() != "PLANEJADA"
+            if isinstance(info, dict) and str(info.get("status", "")).upper() not in status_removidos
         }
 
 

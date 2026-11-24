@@ -75,8 +75,13 @@ def gerar_ordens_automaticas(dados: dict) -> None:
     ordens = _garantir_estrutura_ordens(dados)
     itens = dados.get("itens", {})
 
-    # RN08: Remove ordens PLANEJADAS anteriores antes de gerar as novas
-    for cod in [k for k, v in ordens.items() if isinstance(v, dict) and str(v.get("status", "")).upper() == "PLANEJADA"]:
+    # RN07 / RN08: Remove ordens PLANEJADAS e ATRASADAS anteriores antes de gerar as novas
+    status_removidos = {"PLANEJADA", "ATRASADA"}
+    for cod in [
+        k
+        for k, v in ordens.items()
+        if isinstance(v, dict) and str(v.get("status", "")).upper() in status_removidos
+    ]:
         del ordens[cod]
 
     novas_geradas = 0
